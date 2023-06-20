@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     Int                     @id @default(autoincrement())
+  email                  String                  @unique
+  username               String
+  password               String
+  birthDate              DateTime?
+  description            String?
+  letterLengthPreference LetterLengthPreference?
+  replyTime              ReplyTime?
+  gender                 Gender?
+  tempId                 String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  deletedAt              DateTime?
+  countryId              Int?
+  country                Country?                @relation(fields: [countryId], references: [id])
+  countryChangedAt       DateTime?
+  Theme                  Theme                   @default(LIGHT)
+  UserHobby              UserHobby[]
+  Hobby                  Hobby[]
+  UserLanguage           UserLanguage[]
+  LettersFrom            Letter[]                @relation("from")
+  LettersTo              Letter[]                @relation("to")
+}
+
+model Letter {
+  id           Int      @id @default(autoincrement())
+  sendAt       DateTime @default(now())
+  delivieredAt DateTime
+  fromId       Int
+  toId         Int
+  from         User     @relation(fields: [fromId], references: [id], name: "from")
+  to           User     @relation(fields: [toId], references: [id], name: "to")
+  content      String
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+}
+
+model Language {
+  id           Int            @id @default(autoincrement())
+  name         String
+  UserLanguage UserLanguage[]
+}
+
+model Hobby {
+  id        Int         @id @default(autoincrement())
+  name      String
+  UserHobby UserHobby[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  addedById Int?
+  addedBy   User?       @relation(fields: [addedById], references: [id])
+}
+
+model UserLanguage {
+  id         Int           @id @default(autoincrement())
+  userId     Int
+  languageId Int
+  User       User          @relation(fields: [userId], references: [id])
+  Language   Language      @relation(fields: [languageId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  level      LanguageLevel
+}
+
+model UserHobby {
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  hobbyId Int
+  User    User  @relation(fields: [userId], references: [id])
+  Hobby   Hobby @relation(fields: [hobbyId], references: [id])
+}
+
+enum LetterLengthPreference {
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum ReplyTime {
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
+enum Theme {
+  LIGHT
+  DARK
+}
+
+enum LanguageLevel {
+  NATIVE
+  FLUENT
+  INTERMEDIATE
+  BASIC
+}
