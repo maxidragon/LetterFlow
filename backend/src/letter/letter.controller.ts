@@ -20,4 +20,25 @@ export class LetterController {
   async sendLetter(@Body() dto: SendLetterDto, @GetUser() user: JwtAuthDto) {
     return this.letterService.sendLetter(dto, user.userId);
   }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my')
+  async getMyConversations(@GetUser() user: JwtAuthDto) {
+    return this.letterService.getMyConversations(user.userId);
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('all/:toId')
+  async getAllLetters(
+    @Param('toId') toId: number,
+    @GetUser() user: JwtAuthDto,
+  ) {
+    return this.letterService.getAllLetters(user.userId, toId);
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('one/:letterId')
+  async getOneLetter(
+    @Param('letterId') letterId: number,
+    @GetUser() user: JwtAuthDto,
+  ) {
+    return this.letterService.getLetterById(user.userId, letterId);
+  }
 }

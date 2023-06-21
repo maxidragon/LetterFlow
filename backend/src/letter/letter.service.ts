@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import axios, { AxiosResponse } from 'axios';
 import { SendLetterDto } from './dto/sendLetter.dto';
@@ -6,6 +6,101 @@ import { SendLetterDto } from './dto/sendLetter.dto';
 @Injectable()
 export class LetterService {
   constructor(private readonly prisma: DbService) {}
+  async getMyConversations(userId: number) {
+    return this.prisma.letter.findMany({
+      select: {
+        id: true,
+        sendAt: true,
+        from: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        to: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      where: {
+        OR: [{ fromId: userId }, { toId: userId }],
+      },
+      orderBy: {
+        sendAt: 'desc',
+      },
+      distinct: ['fromId', 'toId'],
+    });
+  }
+
+  async getAllLetters(fromId: number, toId: number) {
+    const letters = await this.prisma.letter.findMany({
+      where: {
+        OR: [
+          { fromId: fromId, toId: toId },
+          { fromId: toId, toId: fromId },
+        ],
+      },
+      select: {
+        id: true,
+        content: true,
+        sendAt: true,
+        deliveredAt: true,
+        from: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        to: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        sendAt: 'asc',
+      },
+    });
+    letters.forEach((letter) => {
+      if (letter.deliveredAt < new Date()) {
+        delete letter.content;
+      }
+    });
+  }
+  async getLetterById(userId: number, letterId: number) {
+    const letter = await this.prisma.letter.findUnique({
+      where: { id: letterId },
+      select: {
+        id: true,
+        content: true,
+        sendAt: true,
+        deliveredAt: true,
+        from: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        to: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
+    if (letter.from.id !== userId && letter.to.id !== userId) {
+      throw new HttpException('Forbidden', 403);
+    }
+    if (letter.deliveredAt < new Date()) {
+      delete letter.content;
+    }
+    return letter;
+  }
+
   async sendLetter(dto: SendLetterDto, fromId: number) {
     const fromUser = await this.prisma.user.findUnique({
       where: { id: fromId },
@@ -33,7 +128,7 @@ export class LetterService {
         deliveredAt: new Date(deliveryDate),
       },
     });
-    return letter;
+    return { ok: true, status: 201 };
   }
   async getDeliveryTime(fromCountry: string, toCountry: string) {
     const fromCoordinates: AxiosResponse = await axios.get(
