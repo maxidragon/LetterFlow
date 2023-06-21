@@ -1,11 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import axios, { AxiosResponse } from 'axios';
+import { SendLetterDto } from './dto/sendLetter.dto';
 
 @Injectable()
 export class LetterService {
   constructor(private readonly prisma: DbService) {}
+  async sendLetter(dto: SendLetterDto, fromId: number) {
+    const fromUser = await this.prisma.user.findUnique({
+      where: { id: fromId },
+      select: { country: true },
+    });
+    const toUser = await this.prisma.user.findUnique({
+      where: { id: dto.receiverId },
+      select: { country: true },
+    });
 
+    const sendDate = new Date();
+    const deliveryTime = await this.getDeliveryTime(
+      fromUser.country.name,
+      toUser.country.name,
+    );
+    const deliveryDate = new Date().setHours(
+      sendDate.getHours() + deliveryTime.timeInHours,
+    );
+    console.log(deliveryDate);
+    const letter = await this.prisma.letter.create({
+      data: {
+        content: dto.content,
+        fromId: fromId,
+        toId: dto.receiverId,
+        deliveredAt: new Date(deliveryDate),
+      },
+    });
+    return letter;
+  }
   async getDeliveryTime(fromCountry: string, toCountry: string) {
     const fromCoordinates: AxiosResponse = await axios.get(
       `https://restcountries.com/v3.1/name/${fromCountry}`,

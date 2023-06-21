@@ -36,14 +36,14 @@ model User {
 }
 
 model Letter {
-  id           Int      @id @default(autoincrement())
-  sendAt       DateTime @default(now())
-  delivieredAt DateTime
-  fromId       Int
-  toId         Int
-  from         User     @relation(fields: [fromId], references: [id], name: "from")
-  to           User     @relation(fields: [toId], references: [id], name: "to")
-  content      String
+  id          Int      @id @default(autoincrement())
+  sendAt      DateTime @default(now())
+  deliveredAt DateTime
+  fromId      Int
+  toId        Int
+  from        User     @relation(fields: [fromId], references: [id], name: "from")
+  to          User     @relation(fields: [toId], references: [id], name: "to")
+  content     String
 }
 
 model Country {
