@@ -18,11 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          working-directory: ./frontend
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+        run: |
+          cd frontend
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
