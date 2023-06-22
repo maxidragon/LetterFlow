@@ -4,6 +4,7 @@ import { DbService } from '../db/db.service';
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: DbService) {}
+
   async getUserProfile(userId: number) {
     const userInfo = await this.prisma.user.findUnique({
       where: {
@@ -69,5 +70,24 @@ export class UserService {
     profile.hobbies = hobbies;
     profile.languages = languages;
     return profile;
+  }
+
+  async getSettings(userId: number) {
+    return this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        description: true,
+        birthDate: true,
+        country: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 }
