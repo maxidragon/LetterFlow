@@ -5,6 +5,7 @@ import { DbModule } from './db/db.module';
 import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { LetterModule } from './letter/letter.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { LetterModule } from './letter/letter.module';
       }),
     }),
     LetterModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
