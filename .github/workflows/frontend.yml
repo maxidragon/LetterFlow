@@ -20,9 +20,10 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
+          working-directory: ./frontend
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Build frontend
-        working-directory: frontend
+        working-directory: ./frontend
         run: npm run build
 
