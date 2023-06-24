@@ -9,7 +9,6 @@ import PersonIcon from '@mui/icons-material/Person';
 const LoginPartial = () => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const user = getUserInfo();
-    console.log(user);
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth <= 800) {

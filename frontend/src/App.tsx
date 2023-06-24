@@ -9,6 +9,7 @@ import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import {SnackbarProvider} from "notistack";
 import Layout from "./Layout/Layout";
 import Main from "./Pages/Main/Main";
+import Chat from "./Pages/Chat/Chat";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
         path: "/auth/password/reset/:resetId",
         element: <ResetPassword/>,
     },
+    {
+        path: "/chat",
+        element: <Layout children={<Chat noConversation={true} />} />
+    },
+    {
+        path: "/chat/:receiverId",
+        element: <Layout children={<Chat noConversation={false}/>} />
+    }
 ]);
 const lightTheme = createTheme({
     palette: {
