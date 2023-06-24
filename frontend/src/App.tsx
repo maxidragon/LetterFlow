@@ -7,8 +7,14 @@ import Login from "./Pages/Auth/Login/Login";
 import Register from "./Pages/Auth/Register/Register";
 import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import {SnackbarProvider} from "notistack";
+import Layout from "./Layout/Layout";
+import Main from "./Pages/Main/Main";
 
 const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout children={<Main />} />
+    },
     {
         path: "/auth/login",
         element: <Login/>,

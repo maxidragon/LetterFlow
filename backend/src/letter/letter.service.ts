@@ -120,7 +120,7 @@ export class LetterService {
       sendDate.getHours() + deliveryTime.timeInHours,
     );
     console.log(deliveryDate);
-    const letter = await this.prisma.letter.create({
+    await this.prisma.letter.create({
       data: {
         content: dto.content,
         fromId: fromId,
@@ -143,7 +143,10 @@ export class LetterService {
       toCoordinates.data[0].capitalInfo.latlng[0],
       toCoordinates.data[0].capitalInfo.latlng[1],
     );
-    const timeInHours = Math.round(distance / 300);
+    let timeInHours = Math.round(distance / 300);
+    if (distance === 0) {
+      timeInHours = 2;
+    }
     return {
       from: fromCoordinates.data[0].name.common,
       to: toCoordinates.data[0].name.common,
