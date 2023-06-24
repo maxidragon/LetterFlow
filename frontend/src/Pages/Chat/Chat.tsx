@@ -1,6 +1,7 @@
 import {useParams} from "react-router-dom";
 import Box from "@mui/material/Box";
 import ConversationsList from "../../Components/ConversationsList";
+import Conversation from "./Conversation/Conversation";
 
 const Chat = (props: { noConversation: boolean }) => {
     const {receiverId} = useParams<{ receiverId: string }>();
@@ -12,7 +13,7 @@ const Chat = (props: { noConversation: boolean }) => {
                 </Box>
                 <Box sx={{flex: 1}}>
                     {
-                        props.noConversation ? "Select conversation" : "Conversation"
+                        props.noConversation ? "Select conversation" : <Conversation receiverId={parseInt(receiverId as string)}/>
                     }
                 </Box>
             </Box>
