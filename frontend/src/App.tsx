@@ -11,6 +11,7 @@ import Layout from "./Layout/Layout";
 import Main from "./Pages/Main/Main";
 import Chat from "./Pages/Chat/Chat";
 import {ConfirmProvider} from "material-ui-confirm";
+import Letter from "./Pages/Letter/Letter";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
     {
         path: "/chat/:receiverId",
         element: <Layout children={<Chat noConversation={false}/>}/>
+    },
+    {
+        path: '/letter/:letterId',
+        element: <Layout children={<Chat children={<Letter />} noConversation={true}/>}/>
     }
 ]);
 const lightTheme = createTheme({

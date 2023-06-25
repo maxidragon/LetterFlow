@@ -21,6 +21,16 @@ const Conversation = (props: { receiverId: number }) => {
             console.log(info);
             setReceiverInfo(info);
         };
+
+        const getLetters = async () => {
+            const lettersList = await getLettersFromConversations(props.receiverId);
+            console.log(lettersList);
+            setLetters(lettersList);
+        };
+        getReceiverInfo();
+        getLetters();
+    }, [props.receiverId]);
+    useEffect(() => {
         const getInfoAboutCountry = async () => {
             const info = await getCountryInfo(receiverInfo.country.name);
             const localDate = new Date();
@@ -32,16 +42,9 @@ const Conversation = (props: { receiverId: number }) => {
             info.time = ("0" + utcHour).slice(-2) + ":" + ("0" + utcMinutes).slice(-2);
             setCountryInfo(info);
         };
-        const getLetters = async () => {
-            const lettersList = await getLettersFromConversations(props.receiverId);
-            console.log(lettersList);
-            setLetters(lettersList);
-        };
-        getReceiverInfo();
         getInfoAboutCountry();
-        getLetters();
-    }, [props.receiverId, receiverInfo?.country.name]);
-    return (
+    }, [receiverInfo?.country.name]);
+        return (
         <>
             <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}}>
                 {receiverInfo && countryInfo &&

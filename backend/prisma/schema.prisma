@@ -43,7 +43,7 @@ model Letter {
   toId        Int
   from        User     @relation(fields: [fromId], references: [id], name: "from")
   to          User     @relation(fields: [toId], references: [id], name: "to")
-  content     String
+  content     String   @db.Text
 }
 
 model Country {

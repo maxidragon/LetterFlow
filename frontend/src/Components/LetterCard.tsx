@@ -2,12 +2,14 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {formatDate} from "../logic/other";
+import {useNavigate} from "react-router-dom";
 
 const LetterCard = (props: any) => {
+    const navigate = useNavigate();
     const sendAt = formatDate(new Date(props.letter.sendAt));
     const deliveredAt = formatDate(new Date(props.letter.deliveredAt));
     return (
-        <Card sx={{ width: 300, mr: 5, mt: 2, cursor: 'pointer' }}>
+        <Card sx={{ width: 300, mr: 5, mt: 2, cursor: 'pointer'}} onClick={() => navigate(`/letter/${props.letter.id}`)}>
             <CardContent sx={{mt: 2, display: 'flex', flexDirection: 'column'}}>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                    Send at: {sendAt}

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import ConversationsList from "../../Components/ConversationsList";
 import Conversation from "./Conversation/Conversation";
 
-const Chat = (props: { noConversation: boolean }) => {
+const Chat = (props: { noConversation: boolean, children?: any }) => {
     const {receiverId} = useParams<{ receiverId: string }>();
     return (
         <>
@@ -13,8 +13,12 @@ const Chat = (props: { noConversation: boolean }) => {
                 </Box>
                 <Box sx={{flex: 1, ml: 1}}>
                     {
-                        props.noConversation ? "Select conversation" : <Conversation receiverId={parseInt(receiverId as string)}/>
+                        props.noConversation ? (props.children ? (<>
+                                {props.children}
+                            </>
+                        ) : 'Select conversation') : <Conversation receiverId={parseInt(receiverId as string)}/>
                     }
+
                 </Box>
             </Box>
 

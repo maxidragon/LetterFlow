@@ -96,7 +96,7 @@ export class LetterService {
     if (letter.from.id !== userId && letter.to.id !== userId) {
       throw new HttpException('Forbidden', 403);
     }
-    if (letter.deliveredAt < new Date()) {
+    if (letter.deliveredAt > new Date() && letter.to.id === userId) {
       delete letter.content;
     }
     return letter;

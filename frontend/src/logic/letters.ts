@@ -23,3 +23,11 @@ export const sendLetter = async (receiverId: number, content: string) => {
     });
     return response.status;
 };
+
+export const getLetterById = async (letterId: string | undefined) => {
+    const response = await backendRequest("letter/one/" + letterId, "GET", true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return null;
+}
