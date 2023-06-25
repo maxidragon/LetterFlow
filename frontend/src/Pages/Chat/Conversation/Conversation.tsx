@@ -2,12 +2,17 @@ import Box from "@mui/material/Box";
 import {getUserProfile} from "../../../logic/auth";
 import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import {getCountryInfo} from "../../../logic/countries";
+import CreateIcon from '@mui/icons-material/Create';
+import LetterCard from "../../../Components/LetterCard";
+import {getLettersFromConversations} from "../../../logic/letters";
 
 const Conversation = (props: { receiverId: number }) => {
     const [receiverInfo, setReceiverInfo] = useState<any>(null);
     const [countryInfo, setCountryInfo] = useState<any>(null);
+    const [letters, setLetters] = useState<any>([]);
     useEffect(() => {
             const getReceiverInfo = async () => {
                 const info = await getUserProfile(props.receiverId);
@@ -25,15 +30,19 @@ const Conversation = (props: { receiverId: number }) => {
                 info.time = ("0" + utcHour).slice(-2) + ":" + ("0" + utcMinutes).slice(-2);
                 setCountryInfo(info);
             };
+            const getLetters = async () => {
+                const lettersList = await getLettersFromConversations(props.receiverId);
+                console.log(lettersList);
+                setLetters(lettersList);
+            };
             getInfoAboutCountry();
             getReceiverInfo();
-        }, [props.receiverId, receiverInfo.country.name]
-    )
-    ;
+            getLetters();
+        }, [props.receiverId, receiverInfo?.country.name]);
     return (
         <>
-            <Box sx={{display: 'flex', flexDirection: 'row', width: '100%', height: '100%'}}>
-                {receiverInfo &&
+            <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}}>
+                {receiverInfo && countryInfo &&
                     <Box>
                         <Typography variant="h4">{receiverInfo.username}</Typography>
                         <Typography variant="h6">{receiverInfo.country.name} ({countryInfo.time})</Typography>
@@ -44,6 +53,21 @@ const Conversation = (props: { receiverId: number }) => {
                         </Box>
                     </Box>
                 }
+                <Box>
+                    <Button variant="contained" startIcon={<CreateIcon />}>Write</Button>
+                </Box>
+                <Box sx={{display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap'}}>
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+                    <LetterCard />
+
+                </Box>
+
             </Box>
         </>
     )

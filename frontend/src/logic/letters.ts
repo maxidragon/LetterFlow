@@ -7,3 +7,12 @@ export const getMyConversations = async () => {
     }
     return [];
 };
+
+export const getLettersFromConversations = async (receiverId: number) => {
+    const response = await backendRequest("letter/all/" + receiverId, "GET", true);
+    console.log(response);
+    // if (response.status === 200) {
+    //     return await response.json();
+    // }
+    // return [];
+};

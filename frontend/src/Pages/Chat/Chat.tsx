@@ -11,7 +11,7 @@ const Chat = (props: { noConversation: boolean }) => {
                 <Box sx={{width: '20%', height: '100vh'}}>
                     <ConversationsList/>
                 </Box>
-                <Box sx={{flex: 1}}>
+                <Box sx={{flex: 1, ml: 1}}>
                     {
                         props.noConversation ? "Select conversation" : <Conversation receiverId={parseInt(receiverId as string)}/>
                     }
