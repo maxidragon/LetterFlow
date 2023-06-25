@@ -69,6 +69,7 @@ export class LetterService {
         delete letter.content;
       }
     });
+    return letters;
   }
   async getLetterById(userId: number, letterId: number) {
     const letter = await this.prisma.letter.findUnique({

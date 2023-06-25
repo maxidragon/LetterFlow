@@ -10,9 +10,19 @@ export const getMyConversations = async () => {
 
 export const getLettersFromConversations = async (receiverId: number) => {
     const response = await backendRequest("letter/all/" + receiverId, "GET", true);
-    console.log(response);
-    // if (response.status === 200) {
-    //     return await response.json();
-    // }
-    // return [];
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return [];
+};
+
+export const sendLetter = async (receiverId: number, content: string) => {
+    const response = await backendRequest("letter/send", "POST", true, {
+        receiverId,
+        content
+    });
+    if (response.status === 201) {
+        return 'Letter sent successfully';
+    }
+    return 'Error. Try again later';
 };

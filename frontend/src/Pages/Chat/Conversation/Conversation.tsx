@@ -8,11 +8,13 @@ import {getCountryInfo} from "../../../logic/countries";
 import CreateIcon from '@mui/icons-material/Create';
 import LetterCard from "../../../Components/LetterCard";
 import {getLettersFromConversations} from "../../../logic/letters";
+import WriteLetterModal from "../../../Components/WriteLetterModal";
 
 const Conversation = (props: { receiverId: number }) => {
     const [receiverInfo, setReceiverInfo] = useState<any>(null);
     const [countryInfo, setCountryInfo] = useState<any>(null);
     const [letters, setLetters] = useState<any>([]);
+    const [open, setOpen] = useState<boolean>(false);
     useEffect(() => {
             const getReceiverInfo = async () => {
                 const info = await getUserProfile(props.receiverId);
@@ -54,7 +56,9 @@ const Conversation = (props: { receiverId: number }) => {
                     </Box>
                 }
                 <Box>
-                    <Button variant="contained" startIcon={<CreateIcon />}>Write</Button>
+                    <Button variant="contained" startIcon={<CreateIcon />} onClick={() => setOpen(true)}>Write</Button>
+                    <WriteLetterModal receiverName={receiverInfo?.username} receiverId={props.receiverId} open={open} handleClose={() => setOpen(false)}/>
+
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap'}}>
                     <LetterCard />
