@@ -6,13 +6,30 @@ import Button from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
 import {useRef} from "react";
 import {sendLetter} from "../logic/letters";
+import {enqueueSnackbar} from "notistack";
+import {useConfirm} from "material-ui-confirm";
+
 
 const WriteLetterModal = (props: { receiverName: string, receiverId: number, open: boolean, handleClose: any }) => {
+    const confirm = useConfirm();
     const contentRef: any = useRef();
+
     const handleSend = async () => {
-        const response = await sendLetter(props.receiverId, contentRef.current.value);
-        console.log(response);
-    }
+        confirm({description: "You can't edit or delete this letter"})
+            .then(async () => {
+                const response = await sendLetter(props.receiverId, contentRef.current.value);
+                if (response === 201) {
+                    enqueueSnackbar("Letter sent", {variant: "success"});
+                    props.handleClose();
+                } else {
+                    enqueueSnackbar("Error. Try again later", {variant: "error"});
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                enqueueSnackbar("Something went wrong", {variant: "error"});
+            });
+    };
     const style = {
         position: 'absolute' as 'absolute',
         top: '50%',

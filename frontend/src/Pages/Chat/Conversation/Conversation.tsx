@@ -16,31 +16,31 @@ const Conversation = (props: { receiverId: number }) => {
     const [letters, setLetters] = useState<any>([]);
     const [open, setOpen] = useState<boolean>(false);
     useEffect(() => {
-            const getReceiverInfo = async () => {
-                const info = await getUserProfile(props.receiverId);
-                console.log(info);
-                setReceiverInfo(info);
-            };
-            const getInfoAboutCountry = async () => {
-                const info = await getCountryInfo(receiverInfo.country.name);
-                const localDate = new Date();
-                let offsetSign = info.timezones[0].includes("+") ? 1 : -1;
-                let offsetParts = info.timezones[0].split(/:|UTC/);
-                let utcOffset = (parseInt(offsetParts[1]) + parseInt(offsetParts[2]) / 60) * offsetSign;
-                let utcHour = localDate.getUTCHours() + utcOffset;
-                let utcMinutes = localDate.getUTCMinutes();
-                info.time = ("0" + utcHour).slice(-2) + ":" + ("0" + utcMinutes).slice(-2);
-                setCountryInfo(info);
-            };
-            const getLetters = async () => {
-                const lettersList = await getLettersFromConversations(props.receiverId);
-                console.log(lettersList);
-                setLetters(lettersList);
-            };
-            getInfoAboutCountry();
-            getReceiverInfo();
-            getLetters();
-        }, [props.receiverId, receiverInfo?.country.name]);
+        const getReceiverInfo = async () => {
+            const info = await getUserProfile(props.receiverId);
+            console.log(info);
+            setReceiverInfo(info);
+        };
+        const getInfoAboutCountry = async () => {
+            const info = await getCountryInfo(receiverInfo.country.name);
+            const localDate = new Date();
+            let offsetSign = info.timezones[0].includes("+") ? 1 : -1;
+            let offsetParts = info.timezones[0].split(/:|UTC/);
+            let utcOffset = (parseInt(offsetParts[1]) + parseInt(offsetParts[2]) / 60) * offsetSign;
+            let utcHour = localDate.getUTCHours() + utcOffset;
+            let utcMinutes = localDate.getUTCMinutes();
+            info.time = ("0" + utcHour).slice(-2) + ":" + ("0" + utcMinutes).slice(-2);
+            setCountryInfo(info);
+        };
+        const getLetters = async () => {
+            const lettersList = await getLettersFromConversations(props.receiverId);
+            console.log(lettersList);
+            setLetters(lettersList);
+        };
+        getReceiverInfo();
+        getInfoAboutCountry();
+        getLetters();
+    }, [props.receiverId, receiverInfo?.country.name]);
     return (
         <>
             <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}}>
@@ -56,19 +56,15 @@ const Conversation = (props: { receiverId: number }) => {
                     </Box>
                 }
                 <Box>
-                    <Button variant="contained" startIcon={<CreateIcon />} onClick={() => setOpen(true)}>Write</Button>
-                    <WriteLetterModal receiverName={receiverInfo?.username} receiverId={props.receiverId} open={open} handleClose={() => setOpen(false)}/>
+                    <Button variant="contained" startIcon={<CreateIcon/>} onClick={() => setOpen(true)}>Write</Button>
+                    <WriteLetterModal receiverName={receiverInfo?.username} receiverId={props.receiverId} open={open}
+                                      handleClose={() => setOpen(false)}/>
 
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap'}}>
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
-                    <LetterCard />
+                    {letters.map((letter: any) => (
+                        <LetterCard letter={letter} key={letter.id}/>
+                    ))}
 
                 </Box>
 

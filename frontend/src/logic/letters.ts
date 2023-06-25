@@ -21,8 +21,5 @@ export const sendLetter = async (receiverId: number, content: string) => {
         receiverId,
         content
     });
-    if (response.status === 201) {
-        return 'Letter sent successfully';
-    }
-    return 'Error. Try again later';
+    return response.status;
 };

@@ -10,11 +10,12 @@ import {SnackbarProvider} from "notistack";
 import Layout from "./Layout/Layout";
 import Main from "./Pages/Main/Main";
 import Chat from "./Pages/Chat/Chat";
+import {ConfirmProvider} from "material-ui-confirm";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Layout children={<Main />} />
+        element: <Layout children={<Main/>}/>
     },
     {
         path: "/auth/login",
@@ -34,11 +35,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/chat",
-        element: <Layout children={<Chat noConversation={true} />} />
+        element: <Layout children={<Chat noConversation={true}/>}/>
     },
     {
         path: "/chat/:receiverId",
-        element: <Layout children={<Chat noConversation={false}/>} />
+        element: <Layout children={<Chat noConversation={false}/>}/>
     }
 ]);
 const lightTheme = createTheme({
@@ -50,7 +51,9 @@ const App = () => {
     return (
         <ThemeProvider theme={lightTheme}>
             <SnackbarProvider>
-                <RouterProvider router={router}/>
+                <ConfirmProvider>
+                    <RouterProvider router={router}/>
+                </ConfirmProvider>
             </SnackbarProvider>
         </ThemeProvider>
     )

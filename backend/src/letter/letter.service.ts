@@ -61,11 +61,11 @@ export class LetterService {
         },
       },
       orderBy: {
-        sendAt: 'asc',
+        sendAt: 'desc',
       },
     });
     letters.forEach((letter) => {
-      if (letter.deliveredAt < new Date()) {
+      if (letter.deliveredAt > new Date() && letter.to.id === fromId) {
         delete letter.content;
       }
     });
