@@ -65,7 +65,7 @@ const ProfileModal = (props: {
               ))}
               <Divider />
               <Typography variant="h6">Preferences:</Typography>
-              <Typography variant="h6">Reply time: {profile.replyTime.toLowerCase()}</Typography>
+              <Typography variant="h6">Reply time: {profile.replyTime ? profile.replyTime.toLowerCase() : "No preferences"}</Typography>
             </>
           )}
         </Box>
