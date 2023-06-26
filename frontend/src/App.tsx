@@ -13,6 +13,7 @@ import Chat from "./Pages/Chat/Chat";
 import {ConfirmProvider} from "material-ui-confirm";
 import Letter from "./Pages/Letter/Letter";
 import Search from './Pages/Search/Search';
+import ErrorElement from './Pages/ErrorElement/ErrorElement';
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
     {
         path: "/search",
         element: <Layout children={<Search/>}/>
+    },
+    {
+        path: "*",
+        element: <Layout children={<ErrorElement message="404 not found" />}/>
     }
 ]);
 const lightTheme = createTheme({
