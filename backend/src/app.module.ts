@@ -7,6 +7,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
 import { HobbyModule } from './hobby/hobby.module';
+import { CountryModule } from './country/country.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { HobbyModule } from './hobby/hobby.module';
     LetterModule,
     UserModule,
     HobbyModule,
+    CountryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

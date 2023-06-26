@@ -44,17 +44,24 @@ export class UserController {
   ) {
     if (countryIds) {
       if (Array.isArray(countryIds)) {
-        countryIds = countryIds.map(id => parseInt(id.toString()));
-      }
-      else {
+        countryIds = countryIds.map((id) => parseInt(id.toString()));
+      } else {
         countryIds = [parseInt(countryIds)];
       }
     }
-    if (hobbies && Array.isArray(hobbies)) {
-      hobbies = hobbies.map(id => parseInt(id.toString()));
+    if (hobbies) {
+      if (Array.isArray(hobbies)) {
+        hobbies = hobbies.map((id) => parseInt(id.toString()));
+      } else {
+        hobbies = [parseInt(hobbies)];
+      }
     }
-    if (languages && Array.isArray(languages)) {
-      languages = languages.map(id => parseInt(id.toString()));
+    if (languages) {
+      if (Array.isArray(languages)) {
+        languages = languages.map((id) => parseInt(id.toString()));
+      } else {
+        languages = [parseInt(languages)];
+      }
     }
     return this.userService.searchUsers(
       username,

@@ -7,3 +7,11 @@ export const getProfile = async (userId: number) => {
     }
     return null;
 };
+
+export const searchUsers = async (query: string) => {
+    const response = await backendRequest(`user/search?${query}`, 'GET', true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return [];
+};

@@ -6,3 +6,11 @@ export const formatDate = (date: Date) => {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
+
+export const formatNumberArrayToQuery = (array: number[], queryName: string) => {
+    let query = '';
+    for (let i = 0; i < array.length; i++) {
+        query += `${queryName}=${array[i]}&`;
+    }
+    return query;
+};

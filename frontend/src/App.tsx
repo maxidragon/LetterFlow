@@ -12,6 +12,7 @@ import Main from "./Pages/Main/Main";
 import Chat from "./Pages/Chat/Chat";
 import {ConfirmProvider} from "material-ui-confirm";
 import Letter from "./Pages/Letter/Letter";
+import Search from './Pages/Search/Search';
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
     {
         path: '/letter/:letterId',
         element: <Layout children={<Chat children={<Letter />} noConversation={true}/>}/>
+    },
+    {
+        path: "/search",
+        element: <Layout children={<Search/>}/>
     }
 ]);
 const lightTheme = createTheme({
