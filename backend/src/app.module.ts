@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
+import { HobbyModule } from './hobby/hobby.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     }),
     LetterModule,
     UserModule,
+    HobbyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
