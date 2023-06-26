@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
 import {useRef} from "react";
-import {sendLetter} from "../logic/letters";
+import {sendLetter} from "../../logic/letters";
 import {enqueueSnackbar} from "notistack";
 import {useConfirm} from "material-ui-confirm";
 

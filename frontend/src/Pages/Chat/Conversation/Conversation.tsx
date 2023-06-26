@@ -1,20 +1,22 @@
-import Box from "@mui/material/Box";
-import {getUserProfile} from "../../../logic/auth";
-import {useEffect, useState} from "react";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import {getCountryInfo} from "../../../logic/countries";
 import CreateIcon from '@mui/icons-material/Create';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
 import LetterCard from "../../../Components/LetterCard";
-import {getLettersFromConversations} from "../../../logic/letters";
-import WriteLetterModal from "../../../Components/WriteLetterModal";
+import ProfileModal from "../../../Components/ModalComponents/ProfileModal";
+import WriteLetterModal from "../../../Components/ModalComponents/WriteLetterModal";
+import Hobbies from "../../../Components/Profile/Hobbies";
+import { getUserProfile } from "../../../logic/auth";
+import { getCountryInfo } from "../../../logic/countries";
+import { getLettersFromConversations } from "../../../logic/letters";
 
 const Conversation = (props: { receiverId: number }) => {
     const [receiverInfo, setReceiverInfo] = useState<any>(null);
     const [countryInfo, setCountryInfo] = useState<any>(null);
     const [letters, setLetters] = useState<any>([]);
     const [open, setOpen] = useState<boolean>(false);
+    const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
     useEffect(() => {
         const getReceiverInfo = async () => {
             const info = await getUserProfile(props.receiverId);
@@ -32,6 +34,7 @@ const Conversation = (props: { receiverId: number }) => {
     }, [props.receiverId]);
     useEffect(() => {
         const getInfoAboutCountry = async () => {
+            if (receiverInfo === null) return;
             const info = await getCountryInfo(receiverInfo.country.name);
             const localDate = new Date();
             let offsetSign = info.timezones[0].includes("+") ? 1 : -1;
@@ -43,26 +46,22 @@ const Conversation = (props: { receiverId: number }) => {
             setCountryInfo(info);
         };
         getInfoAboutCountry();
-    }, [receiverInfo?.country.name]);
-        return (
+    }, [receiverInfo, receiverInfo?.country.name]);
+    return (
         <>
             <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}}>
                 {receiverInfo && countryInfo &&
                     <Box>
-                        <Typography variant="h4">{receiverInfo.username}</Typography>
+                        <Typography variant="h4" sx={{cursor: 'pointer'}} onClick={() => setShowProfileModal(true)}>{receiverInfo.username}</Typography>
                         <Typography variant="h6">{receiverInfo.country.name} ({countryInfo.time})</Typography>
-                        <Box>
-                            {receiverInfo.hobbies.map((hobby: string) => (
-                                <Chip label={hobby}/>
-                            ))}
-                        </Box>
+                        <Hobbies hobbies={receiverInfo.hobbies}/>
                     </Box>
                 }
                 <Box>
                     <Button variant="contained" startIcon={<CreateIcon/>} onClick={() => setOpen(true)}>Write</Button>
                     <WriteLetterModal receiverName={receiverInfo?.username} receiverId={props.receiverId} open={open}
                                       handleClose={() => setOpen(false)}/>
-
+                    <ProfileModal open={showProfileModal} handleClose={() => setShowProfileModal(false)} userId={props.receiverId}/>
                 </Box>
                 <Box sx={{display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap'}}>
                     {letters.map((letter: any) => (
