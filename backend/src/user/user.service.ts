@@ -104,4 +104,65 @@ export class UserService {
       },
     });
   }
+  async searchUsers(
+    username?: string,
+    languages?: number[],
+    countryIds?: number[],
+    hobbies?: number[],
+    gender?: string[],
+  ) {
+    const where = {};
+
+    if (username) {
+      where['username'] = {
+        contains: username,
+      };
+    }
+  
+    if (languages && languages.length > 0) {
+      where['UserLanguage'] = {
+        some: {
+          Language: {
+            id: {
+              in: languages,
+            },
+          },
+        },
+      };
+    }
+  
+    if (countryIds && countryIds.length > 0) {
+      where['country'] = {
+        id: {
+          in: countryIds,
+        },
+      };
+    }
+  
+    if (hobbies && hobbies.length > 0) {
+      where['UserHobby'] = {
+        some: {
+          Hobby: {
+            id: {
+              in: hobbies,
+            },
+          },
+        },
+      };
+    }
+  
+    return this.prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        username: true,
+        gender: true,
+        country: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
 }
