@@ -12,4 +12,17 @@ export class CountryService {
             },
         });
     }
+    async getCountryId (searchName: string) {
+        return await this.prisma.country.findFirst({
+            //case insensitive search
+            where: {
+                name: {
+                    contains: searchName,
+                },
+            },
+            select: {
+                id: true,
+            },
+        });
+    };
 }

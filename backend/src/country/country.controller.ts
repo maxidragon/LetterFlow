@@ -9,4 +9,8 @@ export class CountryController {
   async getAllCountries() {
     return await this.countryService.getAllCountries();
   }
+  @Get('id/:name')
+  async getCountryId(name: string) {
+    return await this.countryService.getCountryId(name);
+  }
 }
