@@ -14,6 +14,7 @@ import {ConfirmProvider} from "material-ui-confirm";
 import Letter from "./Pages/Letter/Letter";
 import Search from './Pages/Search/Search';
 import ErrorElement from './Pages/ErrorElement/ErrorElement';
+import Settings from './Pages/Settings/Settings';
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     {
         path: "/search",
         element: <Layout children={<Search/>}/>
+    },
+    {
+        path: "/settings",
+        element: <Layout children={<Settings />} />
     },
     {
         path: "*",

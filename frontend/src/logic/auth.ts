@@ -1,3 +1,4 @@
+import { getInfoAboutIp, getUserIP } from "./ip";
 import {backendRequest} from "./request";
 
 export const getUserInfo = () => {
@@ -10,12 +11,16 @@ export const getUserInfo = () => {
 
 export const registerUser = async (email: FormDataEntryValue | null, username: FormDataEntryValue | null, password: FormDataEntryValue | null, gender: FormDataEntryValue | null) => {
     try {
+        const userIp = await getUserIP();
+        const ipInfo = await getInfoAboutIp(userIp);
         const body = {
             email: email,
             username: username,
             password: password,
             gender: gender, //TODO
-            countryId: 1 //CHANGE IT
+            countryId: 1, //CHANGE IT
+            lat: ipInfo.lat.toString(),
+            lon: ipInfo.lon.toString(),
         };
         const response = await backendRequest("auth/register", "POST", false, body);
         console.log(body);

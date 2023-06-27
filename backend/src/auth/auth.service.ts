@@ -34,6 +34,9 @@ export class AuthService {
         email: dto.email,
         password: sha512(dto.password),
         username: dto.username,
+        lat: dto.lat,
+        lon: dto.lon,
+        countryId: dto.countryId,
       },
     });
     await this.prisma.user.update({

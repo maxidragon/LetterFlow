@@ -55,7 +55,7 @@ const ProfileModal = (props: {
                 Country: {profile.country.name}
               </Typography>
               <Typography variant="h6">
-                Gender: {(profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1).toLowerCase())}
+                Gender: {profile.gender && (profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1).toLowerCase())}
               </Typography>
               <Typography variant="h6">Letter delivers in 24 hours</Typography>
               <Divider />

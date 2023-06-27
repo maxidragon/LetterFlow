@@ -25,4 +25,8 @@ export class RegisterDto {
   gender: string;
   @IsInt()
   countryId: number;
+  @IsString()
+  lat: string;
+  @IsString()
+  lon: string;
 }

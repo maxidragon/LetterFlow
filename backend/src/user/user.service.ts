@@ -105,6 +105,7 @@ export class UserService {
     });
   }
   async searchUsers(
+    userId: number,
     username?: string,
     languages?: number[],
     countryIds?: number[],
@@ -149,6 +150,9 @@ export class UserService {
           },
         },
       };
+    }
+    where['id'] = {
+      not: userId,
     }
   
     return this.prisma.user.findMany({

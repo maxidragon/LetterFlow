@@ -19,3 +19,17 @@ export const countriesAPIRequest = (name: string) => {
         redirect: "follow",
     });
 };
+
+export const userIPAPIRequest = () => {
+    return fetch(`https://api.ipify.org/?format=json`, {
+        method: "GET",
+        redirect: "follow",
+    });
+};
+
+export const ipInfoAPIRequest = (path: string, method: string) => {
+    return fetch(`http://ip-api.com/json/${path}`, {
+        method: method,
+        redirect: "follow",
+    });
+};

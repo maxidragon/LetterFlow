@@ -36,6 +36,7 @@ export class UserController {
 
   @Get('search/')
   async searchUsers(
+    @GetUser() user: JwtAuthDto,
     @Query('username') username?: string,
     @Query('languages') languages?: number[],
     @Query('countryIds') countryIds?: number[],
@@ -64,6 +65,7 @@ export class UserController {
       }
     }
     return this.userService.searchUsers(
+      user.userId,
       username,
       languages,
       countryIds,

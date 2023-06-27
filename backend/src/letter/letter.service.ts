@@ -105,17 +105,21 @@ export class LetterService {
   async sendLetter(dto: SendLetterDto, fromId: number) {
     const fromUser = await this.prisma.user.findUnique({
       where: { id: fromId },
-      select: { country: true },
+      select: { country: true, lat: true, lon: true },
     });
     const toUser = await this.prisma.user.findUnique({
       where: { id: dto.receiverId },
-      select: { country: true },
+      select: { country: true, lat: true, lon: true },
     });
 
     const sendDate = new Date();
     const deliveryTime = await this.getDeliveryTime(
       fromUser.country.name,
       toUser.country.name,
+      +fromUser.lat,
+      +fromUser.lon,
+      +toUser.lat,
+      +toUser.lon,
     );
     const deliveryDate = new Date().setHours(
       sendDate.getHours() + deliveryTime.timeInHours,
@@ -131,26 +135,29 @@ export class LetterService {
     });
     return { ok: true, status: 201 };
   }
-  async getDeliveryTime(fromCountry: string, toCountry: string) {
-    const fromCoordinates: AxiosResponse = await axios.get(
-      `https://restcountries.com/v3.1/name/${fromCountry}`,
-    );
-    const toCoordinates: AxiosResponse = await axios.get(
-      `https://restcountries.com/v3.1/name/${toCountry}`,
-    );
-    const distance = this.distance(
-      fromCoordinates.data[0].capitalInfo.latlng[0],
-      fromCoordinates.data[0].capitalInfo.latlng[1],
-      toCoordinates.data[0].capitalInfo.latlng[0],
-      toCoordinates.data[0].capitalInfo.latlng[1],
-    );
+  async getDeliveryTime(fromCountry: string, toCountry: string, lat1?: number, lon1?: number, lat2?: number, lon2?: number) {
+    let distance = 0;
+    if (lat1 && lat2 && lon1 && lon2) {
+      distance = this.distance(lat1, lon1, lat2, lon2);
+    } else {
+      const fromCoordinates: AxiosResponse = await axios.get(
+        `https://restcountries.com/v3.1/name/${fromCountry}`,
+      );
+      const toCoordinates: AxiosResponse = await axios.get(
+        `https://restcountries.com/v3.1/name/${toCountry}`,
+      );
+      distance = this.distance(
+        fromCoordinates.data[0].capitalInfo.latlng[0],
+        fromCoordinates.data[0].capitalInfo.latlng[1],
+        toCoordinates.data[0].capitalInfo.latlng[0],
+        toCoordinates.data[0].capitalInfo.latlng[1],
+      );
+    }
     let timeInHours = Math.round(distance / 300);
     if (distance === 0) {
       timeInHours = 2;
     }
     return {
-      from: fromCoordinates.data[0].name.common,
-      to: toCoordinates.data[0].name.common,
       distanceInKilometers: Math.round(distance),
       timeInHours: timeInHours,
     };

@@ -2,11 +2,12 @@ import {useEffect, useState} from "react";
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {IconButton, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {getUserInfo, logout} from "../logic/auth";
 import PersonIcon from '@mui/icons-material/Person';
 
 const LoginPartial = () => {
+    const navigate = useNavigate();
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const user = getUserInfo();
     useEffect(() => {
@@ -36,6 +37,7 @@ const LoginPartial = () => {
                     <IconButton color="inherit" onClick={(event: any) => {
                         event.preventDefault();
                         logout();
+                        navigate('/');
                         window.location.reload();
                     }}><LogoutIcon fontSize="medium"/></IconButton>
                     <IconButton component={Link} to={`/profile/${user.id}`} rel="noopener noreferrer">

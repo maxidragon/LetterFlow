@@ -1,8 +1,7 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import LoginPartial from "./LoginPartial";
 import { getUserInfo } from "../logic/auth";
-import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 
 const Navbar = (props: any) => {
@@ -21,7 +20,6 @@ const Navbar = (props: any) => {
           LetterFlow
           {user && (
             <>
-        
               <IconButton
                 size="large"
                 edge="start"

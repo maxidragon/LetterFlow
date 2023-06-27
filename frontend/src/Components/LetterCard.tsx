@@ -9,7 +9,11 @@ const LetterCard = (props: any) => {
     const sendAt = formatDate(new Date(props.letter.sendAt));
     const deliveredAt = formatDate(new Date(props.letter.deliveredAt));
     return (
-        <Card sx={{ width: 300, mr: 5, mt: 2, cursor: 'pointer'}} onClick={() => navigate(`/letter/${props.letter.id}`)}>
+        <Card sx={{ width: 300, mr: 5, mt: 2, cursor: props.letter.content ? 'pointer' : 'normal'}} onClick={() => {
+            if (props.letter.content) {
+                navigate(`/letter/${props.letter.id}`);
+            }
+        }}>
             <CardContent sx={{mt: 2, display: 'flex', flexDirection: 'column'}}>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                    Send at: {sendAt}

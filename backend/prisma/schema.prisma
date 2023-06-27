@@ -33,6 +33,9 @@ model User {
   UserLanguage           UserLanguage[]
   LettersFrom            Letter[]                @relation("from")
   LettersTo              Letter[]                @relation("to")
+  lat                    String?
+  lon                    String?
+
 }
 
 model Letter {
