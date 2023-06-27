@@ -1,11 +1,19 @@
 import {
   IsDate,
   IsEmail,
+  IsEnum,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
+  NotEquals,
 } from 'class-validator';
+
+enum Gender {
+  FEMALE = 'FEMALE',
+  MALE = 'MALE',
+  OTHER = 'OTHER'
+}
 
 export class RegisterDto {
   @IsNotEmpty()
@@ -21,8 +29,8 @@ export class RegisterDto {
   @IsOptional()
   @IsDate()
   birthday: Date;
-  @IsString()
-  gender: string;
+  @IsEnum(Gender)
+  gender: Gender;
   @IsInt()
   countryId: number;
   @IsString()
@@ -30,3 +38,4 @@ export class RegisterDto {
   @IsString()
   lon: string;
 }
+

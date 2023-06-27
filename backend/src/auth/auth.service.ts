@@ -37,6 +37,7 @@ export class AuthService {
         lat: dto.lat,
         lon: dto.lon,
         countryId: dto.countryId,
+        gender: dto.gender,
       },
     });
     await this.prisma.user.update({
