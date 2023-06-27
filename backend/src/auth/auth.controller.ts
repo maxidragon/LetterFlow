@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
@@ -32,7 +33,7 @@ export class AuthController {
     res.send({ statusCode: true, message: 'Logout success' });
   }
   @UseGuards(AuthGuard('jwt'))
-  @Post('password/change')
+  @Put('password/change')
   async changePassword(
     @Body() dto: ChangePasswordDto,
     @GetUser() user: JwtAuthDto,

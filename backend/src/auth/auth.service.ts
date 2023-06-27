@@ -98,7 +98,7 @@ export class AuthService {
       },
     });
     if (sha512(oldPassword) !== user.password) {
-      return 'Wrong password';
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
     }
     await this.prisma.user.update({
       where: {

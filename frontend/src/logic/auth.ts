@@ -64,6 +64,14 @@ export const resetPassword = async (resetId: string, newPassword: string) => {
     return response.status;
 };
 
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+    const response = await backendRequest("auth/password/change", "PUT", true, {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+    });
+    return response.status;
+}
+
 export const getUserProfile = async (userId: number) => {
     try {
         const response = await backendRequest("user/profile/" + userId, "GET", true);

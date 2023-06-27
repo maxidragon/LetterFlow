@@ -8,7 +8,7 @@ import {useRef} from "react";
 import {sendLetter} from "../../logic/letters";
 import {enqueueSnackbar} from "notistack";
 import {useConfirm} from "material-ui-confirm";
-
+import { style } from "./modalStyles";
 
 const WriteLetterModal = (props: { receiverName: string, receiverId: number, open: boolean, handleClose: any }) => {
     const confirm = useConfirm();
@@ -29,17 +29,6 @@ const WriteLetterModal = (props: { receiverName: string, receiverId: number, ope
                 console.error(error);
                 enqueueSnackbar("Something went wrong", {variant: "error"});
             });
-    };
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
     };
     return (
         <Modal

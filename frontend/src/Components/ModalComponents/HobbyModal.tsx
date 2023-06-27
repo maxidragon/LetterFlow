@@ -14,23 +14,13 @@ import { useEffect, useState } from "react";
 import { getAllHobbies } from "../../logic/selectValues";
 import { addHobby, getMyHobbies, removeHobby } from "../../logic/hobby";
 import { enqueueSnackbar } from "notistack";
+import { style } from "./modalStyles";
 
 const HobbyModal = (props: {
   open: boolean;
   handleClose: any;
 }) => {
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-    overflow: "auto",
-  };
+
   const [possibleHobbies, setPossibleHobbies] = useState<any[]>([]);
   const [myHobbies, setMyHobbies] = useState<any[]>([]);
   useEffect(() => {

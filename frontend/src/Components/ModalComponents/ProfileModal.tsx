@@ -8,6 +8,7 @@ import { formatDate } from "../../logic/other";
 import Hobbies from "../Profile/Hobbies";
 import CreateIcon from '@mui/icons-material/Create';
 import WriteLetterModal from "./WriteLetterModal";
+import { style } from "./modalStyles";
 
 const ProfileModal = (props: {
   open: boolean;
@@ -26,17 +27,6 @@ const ProfileModal = (props: {
     };
     getUserProfile();
   }, [props.userId]);
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>

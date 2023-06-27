@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import HobbyModal from "../../Components/ModalComponents/HobbyModal";
-
+import ChangePasswordModal from "../../Components/ModalComponents/ChangePasswordModal";
 
 const Settings = () => {
-    const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
+  const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState<boolean>(false);
   const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
@@ -90,10 +91,28 @@ const Settings = () => {
                   />
                 </Grid>
                 <Grid item>
-                 <Button variant="contained" onClick={() => setOpenHobbyModal(true)}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenHobbyModal(true)}
+                  >
                     Change hobbies
                   </Button>
-                  <HobbyModal open={openHobbyModal} handleClose={() => setOpenHobbyModal(false)} />
+                  <HobbyModal
+                    open={openHobbyModal}
+                    handleClose={() => setOpenHobbyModal(false)}
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenChangePasswordModal(true)}
+                  >
+                    Change password
+                  </Button>
+                  <ChangePasswordModal
+                    open={openChangePasswordModal}
+                    handleClose={() => setOpenChangePasswordModal(false)}
+                  />
                 </Grid>
                 <Grid item>
                   <Button variant="contained" onClick={handleSubmit}>
