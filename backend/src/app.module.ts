@@ -8,6 +8,7 @@ import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
 import { HobbyModule } from './hobby/hobby.module';
 import { CountryModule } from './country/country.module';
+import { LanguageModule } from './language/language.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { CountryModule } from './country/country.module';
     UserModule,
     HobbyModule,
     CountryModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
