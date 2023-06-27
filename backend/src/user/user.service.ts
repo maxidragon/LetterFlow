@@ -81,6 +81,7 @@ export class UserService {
       select: {
         id: true,
         username: true,
+        email: true,
         description: true,
         birthDate: true,
         country: {
@@ -92,17 +93,22 @@ export class UserService {
     });
   }
   async updateSettings(dto: UpdateSettingsDto, userId: number) {
-    return this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        username: dto.username,
-        email: dto.email,
-        description: dto.description,
-        birthDate: dto.birthDate,
-      },
-    });
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          username: dto.username,
+          email: dto.email,
+          description: dto.description,
+          birthDate: dto.birthDate,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+    return { msg: 'Settings updated successfully' };
   }
   async searchUsers(
     userId: number,
@@ -119,7 +125,7 @@ export class UserService {
         contains: username,
       };
     }
-  
+
     if (languages && languages.length > 0) {
       where['UserLanguage'] = {
         some: {
@@ -131,7 +137,7 @@ export class UserService {
         },
       };
     }
-  
+
     if (countryIds && countryIds.length > 0) {
       where['country'] = {
         id: {
@@ -139,7 +145,7 @@ export class UserService {
         },
       };
     }
-  
+
     if (hobbies && hobbies.length > 0) {
       where['UserHobby'] = {
         some: {
@@ -153,8 +159,8 @@ export class UserService {
     }
     where['id'] = {
       not: userId,
-    }
-  
+    };
+
     return this.prisma.user.findMany({
       where,
       select: {

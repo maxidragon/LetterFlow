@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Param,
-  Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -26,7 +26,7 @@ export class UserController {
   async getSettings(@GetUser() user: JwtAuthDto) {
     return this.userService.getSettings(user.userId);
   }
-  @Post('settings/')
+  @Put('settings/')
   async updateSettings(
     @GetUser() user: JwtAuthDto,
     @Body() dto: UpdateSettingsDto,

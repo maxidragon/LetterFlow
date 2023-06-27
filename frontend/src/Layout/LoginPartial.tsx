@@ -4,7 +4,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {IconButton, Typography} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
 import {getUserInfo, logout} from "../logic/auth";
-import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const LoginPartial = () => {
     const navigate = useNavigate();
@@ -40,8 +40,8 @@ const LoginPartial = () => {
                         navigate('/');
                         window.location.reload();
                     }}><LogoutIcon fontSize="medium"/></IconButton>
-                    <IconButton component={Link} to={`/profile/${user.id}`} rel="noopener noreferrer">
-                        <PersonIcon sx={{color: "#fff"}} fontSize="medium"/>
+                    <IconButton component={Link} to={`/settings`} rel="noopener noreferrer">
+                        <SettingsIcon sx={{color: "#fff"}} fontSize="medium"/>
                     </IconButton>
                 </>) :
                 <IconButton color="inherit" component={Link} to={"/auth/login"}><LoginIcon fontSize="medium"/></IconButton>

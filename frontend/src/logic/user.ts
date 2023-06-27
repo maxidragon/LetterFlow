@@ -15,3 +15,16 @@ export const searchUsers = async (query: string) => {
     }
     return [];
 };
+
+export const getSettings = async () => {
+    const response = await backendRequest('user/settings', 'GET', true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return null;
+};
+
+export const updateSettings = async (data: any) => {
+    const response = await backendRequest('user/settings', 'PUT', true, data);
+    return response.status;
+};
