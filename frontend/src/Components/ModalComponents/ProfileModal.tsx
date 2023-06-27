@@ -3,9 +3,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import { getProfile } from "../../logic/user";
-import { CircularProgress, Divider } from "@mui/material";
+import { Button, CircularProgress, Divider } from "@mui/material";
 import { formatDate } from "../../logic/other";
 import Hobbies from "../Profile/Hobbies";
+import CreateIcon from '@mui/icons-material/Create';
+import WriteLetterModal from "./WriteLetterModal";
 
 const ProfileModal = (props: {
   open: boolean;
@@ -14,6 +16,7 @@ const ProfileModal = (props: {
 }) => {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   useEffect(() => {
     const getUserProfile = async () => {
       const data = await getProfile(props.userId);
@@ -66,6 +69,9 @@ const ProfileModal = (props: {
               <Divider />
               <Typography variant="h6">Preferences:</Typography>
               <Typography variant="h6">Reply time: {profile.replyTime ? profile.replyTime.toLowerCase() : "No preferences"}</Typography>
+              <Button variant="contained" startIcon={<CreateIcon/>} onClick={() => setOpen(true)}>Write</Button>
+              <WriteLetterModal receiverName={profile.username} receiverId={profile.id} open={open}
+                                      handleClose={() => setOpen(false)}/>
             </>
           )}
         </Box>
