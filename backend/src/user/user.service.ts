@@ -6,7 +6,7 @@ import { UpdateSettingsDto } from './dto/updateSettings.dto';
 export class UserService {
   constructor(private readonly prisma: DbService) {}
 
-  async getUserProfile(userId: number) {
+  async getUserProfile(userId: number, requesterId: number) {
     const userInfo = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -61,12 +61,20 @@ export class UserService {
         level: true,
       },
     });
+    const star = await this.prisma.starredUser.findFirst({
+      where: {
+        userId: userId,
+        starredById: requesterId,
+      },
+    });
+
     languages.forEach((language: any) => {
       language.name = language.Language.name;
       delete language.Language;
     });
     const hobbies = hobbiesObjects.map((hobby: any) => hobby.Hobby.name);
     const profile: any = userInfo;
+    profile.starred = !!star;
     profile.sendLetters = sendLetters;
     profile.receivedLetters = receivedLetters;
     profile.hobbies = hobbies;
@@ -202,5 +210,26 @@ export class UserService {
       throw new Error(error);
     }
     return { msg: 'User unstarred successfully' };
+  }
+  async getMyStarredUsers(userId: number) {
+    return await this.prisma.starredUser.findMany({
+      where: {
+        starredById: userId,
+      },
+      select: {
+        User: {
+          select: {
+            id: true,
+            username: true,
+            country: {
+              select: {
+                name: true,
+                code: true,
+              },
+            }
+          },
+        },
+      },
+    });
   }
 }

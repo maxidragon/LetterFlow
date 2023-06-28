@@ -2,15 +2,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
-import { getProfile } from "../../logic/user";
-import { Button, CircularProgress, Divider } from "@mui/material";
+import { getProfile, starUser, unstarUser } from "../../logic/user";
+import { Button, CircularProgress, Divider, IconButton } from "@mui/material";
 import { formatDate } from "../../logic/other";
 import Hobbies from "../Profile/Hobbies";
-import CreateIcon from '@mui/icons-material/Create';
+import CreateIcon from "@mui/icons-material/Create";
 import WriteLetterModal from "./WriteLetterModal";
 import { style } from "./modalStyles";
 import CountryNameWithFlag from "../CountryNameWithFlag";
-
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+import { enqueueSnackbar } from "notistack";
 const ProfileModal = (props: {
   open: boolean;
   handleClose: any;
@@ -21,13 +23,37 @@ const ProfileModal = (props: {
   const [open, setOpen] = useState<boolean>(false);
   useEffect(() => {
     const getUserProfile = async () => {
-      const data = await getProfile(props.userId);
-      console.log(data);
-      setProfile(data);
-      setLoading(false);
+      if (props.open) {
+        const data = await getProfile(props.userId);
+        setProfile(data);
+        setLoading(false);          
+      }
     };
     getUserProfile();
-  }, [props.userId]);
+  }, [props.userId, props.open]);
+
+  const handleStar = async () => {
+    if (profile.starred) {
+      const status = await unstarUser(profile.id);
+      if (status === 200) {
+        enqueueSnackbar("User unstarred", { variant: "success" });
+      } else {
+        enqueueSnackbar("Server error", { variant: "error" });
+      } 
+    } else {
+      const status = await starUser(profile.id);
+      if (status === 201) {
+        enqueueSnackbar("User starred", { variant: "success" });
+      } else {
+        enqueueSnackbar("Server error", { variant: "error" });
+      } 
+    }
+    setProfile({
+      ...profile,
+      starred: !profile.starred
+    });
+
+  }
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>
@@ -36,7 +62,12 @@ const ProfileModal = (props: {
             <CircularProgress />
           ) : (
             <>
-              <Typography variant="h4">{profile.username}</Typography>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography variant="h4">{profile.username}</Typography>
+                <IconButton onClick={handleStar}>
+                 {profile.starred ? <StarIcon /> : <StarBorderIcon />}
+                </IconButton>
+              </Box>
               {profile.birthDate && (
                 <Typography variant="h5">
                   {formatDate(profile.birthDate)}
@@ -46,7 +77,10 @@ const ProfileModal = (props: {
                 Country: <CountryNameWithFlag country={profile.country} />
               </Typography>
               <Typography variant="h6">
-                Gender: {profile.gender && (profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1).toLowerCase())}
+                Gender:{" "}
+                {profile.gender &&
+                  profile.gender.charAt(0).toUpperCase() +
+                    profile.gender.slice(1).toLowerCase()}
               </Typography>
               <Typography variant="h6">Letter delivers in 24 hours</Typography>
               <Divider />
@@ -55,14 +89,35 @@ const ProfileModal = (props: {
               <Divider />
               <Typography variant="h6">Languages:</Typography>
               {profile.languages.map((language: any) => (
-                <Typography variant="h6">{language.name} {`(${language.level.charAt(0) + language.level.slice(1).toLowerCase()})`}</Typography>
+                <Typography variant="h6">
+                  {language.name}{" "}
+                  {`(${
+                    language.level.charAt(0) +
+                    language.level.slice(1).toLowerCase()
+                  })`}
+                </Typography>
               ))}
               <Divider />
               <Typography variant="h6">Preferences:</Typography>
-              <Typography variant="h6">Reply time: {profile.replyTime ? profile.replyTime.toLowerCase() : "No preferences"}</Typography>
-              <Button variant="contained" startIcon={<CreateIcon/>} onClick={() => setOpen(true)}>Write</Button>
-              <WriteLetterModal receiverName={profile.username} receiverId={profile.id} open={open}
-                                      handleClose={() => setOpen(false)}/>
+              <Typography variant="h6">
+                Reply time:{" "}
+                {profile.replyTime
+                  ? profile.replyTime.toLowerCase()
+                  : "No preferences"}
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<CreateIcon />}
+                onClick={() => setOpen(true)}
+              >
+                Write
+              </Button>
+              <WriteLetterModal
+                receiverName={profile.username}
+                receiverId={profile.id}
+                open={open}
+                handleClose={() => setOpen(false)}
+              />
             </>
           )}
         </Box>

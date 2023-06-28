@@ -4,7 +4,7 @@ const Hobbies = (props: { hobbies: string[] }) => {
   return (
     <Box>
       {props.hobbies.map((hobby: string) => (
-        <Chip label={hobby} />
+        <Chip label={hobby} key={hobby}/>
       ))}
     </Box>
   );

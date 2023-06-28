@@ -38,3 +38,11 @@ export const unstarUser = async (userId: number) => {
     const response = await backendRequest(`user/unstar/${userId}`, 'DELETE', true);
     return response.status;
 };
+
+export const getMyStarredUsers = async () => {
+    const response = await backendRequest('user/starred', 'GET', true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return [];
+};

@@ -31,7 +31,7 @@ const ConversationsList = () => {
                 ))}
             </List>
         </>
-    )
+    );
 };
 
 export default ConversationsList;
