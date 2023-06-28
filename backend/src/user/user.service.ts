@@ -226,7 +226,7 @@ export class UserService {
                 name: true,
                 code: true,
               },
-            }
+            },
           },
         },
       },

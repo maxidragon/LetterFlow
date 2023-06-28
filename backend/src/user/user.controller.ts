@@ -21,7 +21,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('profile/:userId')
-  async getUserProfile(@GetUser() user: JwtAuthDto, @Param('userId') userId: number) {
+  async getUserProfile(
+    @GetUser() user: JwtAuthDto,
+    @Param('userId') userId: number,
+  ) {
     return this.userService.getUserProfile(userId, user.userId);
   }
   @Get('settings/')
@@ -77,10 +80,13 @@ export class UserController {
   }
   @Post('star')
   async starUser(@GetUser() user: JwtAuthDto, @Body('userId') userId: number) {
-    return this.userService.starUser(userId, user.userId,);
+    return this.userService.starUser(userId, user.userId);
   }
   @Delete('unstar/:userId')
-  async unstarUser(@GetUser() user: JwtAuthDto, @Param('userId') userId: number) {
+  async unstarUser(
+    @GetUser() user: JwtAuthDto,
+    @Param('userId') userId: number,
+  ) {
     return this.userService.unstarUser(userId, user.userId);
   }
   @Get('starred')

@@ -11,7 +11,7 @@ import {
 enum Gender {
   FEMALE = 'FEMALE',
   MALE = 'MALE',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
 }
 
 export class RegisterDto {
@@ -37,6 +37,5 @@ export class RegisterDto {
   @IsString()
   lon: string;
   @IsString()
-  ip: string
+  ip: string;
 }
-

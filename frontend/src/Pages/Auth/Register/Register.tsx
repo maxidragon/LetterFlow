@@ -34,6 +34,7 @@ export default function Register() {
             if (message) {
                 const msg = JSON.parse(message).msg;
                 if (msg === "Successfully registered a new account!") {
+                    enqueueSnackbar(msg, {variant: "success"});
                     navigate("/auth/login");
                 } else {
                     enqueueSnackbar('Something went wrong', {variant: "error"});

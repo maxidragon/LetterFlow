@@ -162,84 +162,75 @@ export class AuthService {
   async verifyCountry(userId: number, ip: string) {
     const ipInfo = await axios.get(`http://ip-api.com/json/${ip}`);
     const userInfo = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        country: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    const correctCountry = await this.prisma.country.findFirst({
+      where: {
+        name: {
+          contains: ipInfo.data.country,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    if (correctCountry) {
+      await this.prisma.user.update({
         where: {
-            id: userId,
+          id: userId,
+        },
+        data: {
+          countryId: correctCountry.id,
+          lat: ipInfo.data.lat.toString(),
+          lon: ipInfo.data.lon.toString(),
+          countryChangedAt: new Date(),
+        },
+      });
+      return {
+        msg: `Country verified succesfully, your current country is ${correctCountry.name}`,
+      };
+    } else {
+      await this.prisma.country.create({
+        data: {
+          name: ipInfo.data.country,
+          code: ipInfo.data.countryCode,
+        },
+      });
+      const newCountry = await this.prisma.country.findFirst({
+        where: {
+          name: {
+            contains: ipInfo.data.country,
+          },
         },
         select: {
-            country: {
-                select: {
-                    id: true,
-                },
-            },
+          id: true,
+          name: true,
         },
-    });
-    const country = await this.prisma.country.findUnique({
+      });
+      await this.prisma.user.update({
         where: {
-            id: userInfo.country.id,
+          id: userId,
         },
-        select: {
-            name: true,
+        data: {
+          countryId: newCountry.id,
+          lat: ipInfo.data.lat.toString(),
+          lon: ipInfo.data.lon.toString(),
+          countryChangedAt: new Date(),
         },
-    });
-        const correctCountry = await this.prisma.country.findFirst({
-            where: {
-                name: {
-                    contains: ipInfo.data.country,
-                },
-            },
-            select: {
-                id: true,
-                name: true,
-            },
-        });
-        if (correctCountry) {
-            await this.prisma.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    countryId: correctCountry.id,
-                    lat: ipInfo.data.lat.toString(),
-                    lon: ipInfo.data.lon.toString(),
-                    countryChangedAt: new Date(),
-                },
-            });
-            return {
-              msg: `Country verified succesfully, your current country is ${correctCountry.name}`,
-          }
-        }
-        else {
-            await this.prisma.country.create({
-                data: {
-                    name: ipInfo.data.country,
-                    code: ipInfo.data.countryCode,
-            }});
-            const newCountry = await this.prisma.country.findFirst({
-                where: {
-                    name: {
-                        contains: ipInfo.data.country,
-                    },
-                },
-                select: {
-                    id: true,
-                    name: true,
-                },
-            });
-            await this.prisma.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    countryId: newCountry.id,
-                    lat: ipInfo.data.lat.toString(),
-                    lon: ipInfo.data.lon.toString(),
-                    countryChangedAt: new Date(),
-                },
-            });
-            return {
-                msg: `Country verified succesfully, your current country is ${newCountry.name}`,
-            }
-        }
-    
-}
+      });
+      return {
+        msg: `Country verified succesfully, your current country is ${newCountry.name}`,
+      };
+    }
+  }
 }
