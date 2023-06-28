@@ -15,3 +15,11 @@ export const getAllHobbies = async () => {
     }
     return [];
 };
+
+export const getAllLanguages = async () => {
+    const response = await backendRequest('language/all', 'GET', true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return [];
+};

@@ -11,10 +11,12 @@ import {
 import { enqueueSnackbar } from "notistack";
 import HobbyModal from "../../Components/ModalComponents/HobbyModal";
 import ChangePasswordModal from "../../Components/ModalComponents/ChangePasswordModal";
+import LanguageModal from "../../Components/ModalComponents/LanguageModal";
 
 const Settings = () => {
   const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState<boolean>(false);
+  const [openLanguageModal, setOpenLanguageModal] = useState<boolean>(false);
   const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
@@ -112,6 +114,18 @@ const Settings = () => {
                   <ChangePasswordModal
                     open={openChangePasswordModal}
                     handleClose={() => setOpenChangePasswordModal(false)}
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenLanguageModal(true)}
+                  >
+                    Change languages
+                  </Button>
+                  <LanguageModal 
+                    open={openLanguageModal}
+                    handleClose={() => setOpenLanguageModal(false)}
                   />
                 </Grid>
                 <Grid item>

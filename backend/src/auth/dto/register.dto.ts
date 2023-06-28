@@ -6,7 +6,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  NotEquals,
 } from 'class-validator';
 
 enum Gender {
