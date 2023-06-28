@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { sha512 } from 'js-sha512';
 import { MailerService } from '@nestjs-modules/mailer';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -48,6 +49,7 @@ export class AuthService {
         tempId: sha512(user.id.toString()),
       },
     });
+    this.verifyCountry(user.id, dto.ip);
     return { msg: 'Successfully registered a new account!' };
   }
 
@@ -157,4 +159,87 @@ export class AuthService {
       return 'Error';
     }
   }
+  async verifyCountry(userId: number, ip: string) {
+    const ipInfo = await axios.get(`http://ip-api.com/json/${ip}`);
+    const userInfo = await this.prisma.user.findUnique({
+        where: {
+            id: userId,
+        },
+        select: {
+            country: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
+    const country = await this.prisma.country.findUnique({
+        where: {
+            id: userInfo.country.id,
+        },
+        select: {
+            name: true,
+        },
+    });
+        const correctCountry = await this.prisma.country.findFirst({
+            where: {
+                name: {
+                    contains: ipInfo.data.country,
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+            },
+        });
+        if (correctCountry) {
+            await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    countryId: correctCountry.id,
+                    lat: ipInfo.data.lat.toString(),
+                    lon: ipInfo.data.lon.toString(),
+                    countryChangedAt: new Date(),
+                },
+            });
+            return {
+              msg: `Country verified succesfully, your current country is ${correctCountry.name}`,
+          }
+        }
+        else {
+            await this.prisma.country.create({
+                data: {
+                    name: ipInfo.data.country,
+                    code: ipInfo.data.countryCode,
+            }});
+            const newCountry = await this.prisma.country.findFirst({
+                where: {
+                    name: {
+                        contains: ipInfo.data.country,
+                    },
+                },
+                select: {
+                    id: true,
+                    name: true,
+                },
+            });
+            await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    countryId: newCountry.id,
+                    lat: ipInfo.data.lat.toString(),
+                    lon: ipInfo.data.lon.toString(),
+                    countryChangedAt: new Date(),
+                },
+            });
+            return {
+                msg: `Country verified succesfully, your current country is ${newCountry.name}`,
+            }
+        }
+    
+}
 }

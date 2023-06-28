@@ -12,6 +12,7 @@ import { enqueueSnackbar } from "notistack";
 import HobbyModal from "../../Components/ModalComponents/HobbyModal";
 import ChangePasswordModal from "../../Components/ModalComponents/ChangePasswordModal";
 import LanguageModal from "../../Components/ModalComponents/LanguageModal";
+import { verifyCountry } from "../../logic/auth";
 
 const Settings = () => {
   const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
@@ -45,6 +46,15 @@ const Settings = () => {
     const status = await updateSettings(settings);
     if (status === 200) {
       enqueueSnackbar("Settings has been updated", { variant: "success" });
+    } else {
+      enqueueSnackbar("Server error", { variant: "error" });
+    }
+  };
+  const handleCountryVerify = async (event: any) => {
+    event.preventDefault();
+    const data = await verifyCountry();
+    if (data) {
+      enqueueSnackbar(data.msg, { variant: "success" });
     } else {
       enqueueSnackbar("Server error", { variant: "error" });
     }
@@ -127,6 +137,11 @@ const Settings = () => {
                     open={openLanguageModal}
                     handleClose={() => setOpenLanguageModal(false)}
                   />
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" onClick={handleCountryVerify}>
+                    Verify country
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button variant="contained" onClick={handleSubmit}>

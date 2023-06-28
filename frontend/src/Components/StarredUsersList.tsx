@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMyStarredUsers } from "../logic/user";
-import { List, ListItemButton, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
-import CountryNameWithFlag from "./CountryNameWithFlag";
+import { List } from "@mui/material";
 import StarredUser from "./StarredUser";
 
 const StarredUsersList = () => {

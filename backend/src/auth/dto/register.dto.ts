@@ -36,5 +36,7 @@ export class RegisterDto {
   lat: string;
   @IsString()
   lon: string;
+  @IsString()
+  ip: string
 }
 

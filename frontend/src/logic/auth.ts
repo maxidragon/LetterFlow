@@ -23,6 +23,7 @@ export const registerUser = async (email: FormDataEntryValue | null, username: F
             countryId: countryId,
             lat: ipInfo.lat.toString(),
             lon: ipInfo.lon.toString(),
+            ip: userIp
         };
         const response = await backendRequest("auth/register", "POST", false, body);
         console.log(body);
@@ -84,4 +85,11 @@ export const getUserProfile = async (userId: number) => {
 export const isUserLoggedIn = () => {
     const token = localStorage.getItem("token");
     return token !== null;
+};
+
+export const verifyCountry = async () => {
+    const userIp = await getUserIP();
+    const response = await backendRequest(`auth/country/verify?ip=${userIp}`, "GET", true);
+    const data = await response.json();
+    return data;
 }

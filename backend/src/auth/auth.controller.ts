@@ -52,4 +52,10 @@ export class AuthController {
   async resetPassword(@Body() dto: ResetPasswordDto) {
     await this.authService.resetPassword(dto.tempId, dto.newPassword);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('country/verify')
+  async verifyCountry(@GetUser() user: JwtAuthDto, @Query('ip') ip: string) {
+    return await this.authService.verifyCountry(user.userId, ip);
+  }
 }
