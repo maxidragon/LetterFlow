@@ -11,7 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { getAllCountries, getAllHobbies } from "../../logic/selectValues";
+import {
+  getAllCountries,
+  getAllHobbies,
+  getAllLanguages,
+} from "../../logic/selectValues";
 import { useTheme } from "@emotion/react";
 import { formatNumberArrayToQuery } from "../../logic/other";
 import { searchUsers } from "../../logic/user";
@@ -43,6 +47,8 @@ const Search = () => {
   const [selectedHobbies, setSelectedHobbies] = useState<any[]>([]);
   const [possibleCountries, setPossibleCountries] = useState<any[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<any[]>([]);
+  const [possibleLanguages, setPossibleLanguages] = useState<any[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<any[]>([]);
   const usernameRef: any = useRef();
 
   useEffect(() => {
@@ -51,11 +57,16 @@ const Search = () => {
       setPossibleHobbies(data);
     };
     const getPossibleCountries = async () => {
-        const data = await getAllCountries();
-        setPossibleCountries(data);
+      const data = await getAllCountries();
+      setPossibleCountries(data);
+    };
+    const getPossibleLanguages = async () => {
+      const data = await getAllLanguages();
+      setPossibleLanguages(data);
     };
     getPossibleHobbies();
     getPossibleCountries();
+    getPossibleLanguages();
   }, []);
 
   const handleHobbySelectChange = (event: any) => {
@@ -73,20 +84,40 @@ const Search = () => {
     const newValue = typeof value === "string" ? value.split(",") : value;
     setSelectedCountries(newValue);
   };
+  const handleLanguageSelectChange = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    const newValue = typeof value === "string" ? value.split(",") : value;
+    setSelectedLanguages(newValue);
+  };
 
   const handleSearch = async () => {
-    const formattedHobbies = formatNumberArrayToQuery(selectedHobbies, "hobbies");
-    const formattedCountries = formatNumberArrayToQuery(selectedCountries, "countries");
+    const formattedHobbies = formatNumberArrayToQuery(
+      selectedHobbies,
+      "hobbies"
+    );
+    const formattedCountries = formatNumberArrayToQuery(
+      selectedCountries,
+      "countries"
+    );
+    const formattedLanguages = formatNumberArrayToQuery(
+      selectedLanguages,
+      "languages"
+    );
     const username = usernameRef.current.value;
-    let query = '';
+    let query = "";
     if (username) {
-        query += `username=${username}&`;
+      query += `username=${username}&`;
     }
     if (formattedHobbies) {
-        query += formattedHobbies;
+      query += formattedHobbies;
     }
     if (formattedCountries) {
-        query += formattedCountries;
+      query += formattedCountries;
+    }
+    if (formattedLanguages) {
+      query += formattedLanguages;
     }
     const searchedUsers = await searchUsers(query);
     setSearchResult(searchedUsers);
@@ -104,7 +135,11 @@ const Search = () => {
       >
         <Box sx={{ width: "20%", height: "80vh", pl: 2, pt: 3 }}>
           <Typography variant="h4">Search</Typography>
-          <TextField label="Username" variant="outlined" inputRef={usernameRef}/>
+          <TextField
+            label="Username"
+            variant="outlined"
+            inputRef={usernameRef}
+          />
           <FormControl sx={{ mt: 2, width: "100%" }}>
             <InputLabel id="hobbies-label">Hobbies</InputLabel>
             <Select
@@ -150,29 +185,72 @@ const Search = () => {
                     const country = possibleCountries.find(
                       (c: any) => c.id === value
                     );
-                    return <Chip key={value} label={country ? country.name : ""} />;
+                    return (
+                      <Chip key={value} label={country ? country.name : ""} />
+                    );
                   })}
                 </Box>
               )}
               MenuProps={MenuProps}
             >
-              {possibleCountries.map((country: { id: number; name: string }) => (
-                <MenuItem
-                  key={country.id}
-                  value={country.id}
-                  style={getStyles(country.name, selectedHobbies, theme)}
-                >
-                  {country.name}
-                </MenuItem>
-              ))}
+              {possibleCountries.map(
+                (country: { id: number; name: string }) => (
+                  <MenuItem
+                    key={country.id}
+                    value={country.id}
+                    style={getStyles(country.name, selectedHobbies, theme)}
+                  >
+                    {country.name}
+                  </MenuItem>
+                )
+              )}
             </Select>
-            <Button variant="contained" sx={{ mt: 2, width: "100%" }} onClick={handleSearch}>
-              Search
-            </Button>
           </FormControl>
+          <FormControl sx={{ mt: 2, width: "100%" }}>
+            <InputLabel id="languages-label">Languages</InputLabel>
+            <Select
+              labelId="languages-label"
+              multiple
+              value={selectedLanguages}
+              onChange={handleLanguageSelectChange}
+              input={<OutlinedInput label="Chip" />}
+              renderValue={(selected: any) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value: any) => {
+                    const language = possibleLanguages.find(
+                      (c: any) => c.id === value
+                    );
+                    return (
+                      <Chip key={value} label={language ? language.name : ""} />
+                    );
+                  })}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              {possibleLanguages.map(
+                (language: { id: number; name: string }) => (
+                  <MenuItem
+                    key={language.id}
+                    value={language.id}
+                    style={getStyles(language.name, selectedHobbies, theme)}
+                  >
+                    {language.name}
+                  </MenuItem>
+                )
+              )}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            sx={{ mt: 2, width: "100%" }}
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
         </Box>
-        <Box sx={{ flex: 1, ml: 2, overflowY: 'auto', height: '100%' }}>
-            <SearchResult users={searchResult} />
+        <Box sx={{ flex: 1, ml: 2, overflowY: "auto", height: "100%" }}>
+          <SearchResult users={searchResult} />
         </Box>
       </Box>
     </>
