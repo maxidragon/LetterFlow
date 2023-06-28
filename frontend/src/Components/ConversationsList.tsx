@@ -4,6 +4,7 @@ import {getMyConversations} from "../logic/letters";
 import {List, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import {getUserInfo} from "../logic/auth";
+import CountryNameWithFlag from "./CountryNameWithFlag";
 
 const ConversationsList = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const ConversationsList = () => {
                         <ListItemAvatar>
                             <Avatar alt="Profile Picture"/>
                         </ListItemAvatar>
-                        <ListItemText primary={conversation.to.id === user.id ? conversation.from.username : conversation.to.username} secondary={"secondary"}/>
+                        <ListItemText primary={conversation.to.id === user.id ? conversation.from.username : conversation.to.username} secondary={<CountryNameWithFlag country={conversation.to.id === user.id ? conversation.from.country : conversation.to.country} />}/>
                     </ListItemButton>
                 ))}
             </List>

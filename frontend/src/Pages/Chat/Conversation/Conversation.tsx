@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
-import LetterCard from "../../../Components/LetterCard";
+import LetterCard from "../../../Components/Card/LetterCard";
 import ProfileModal from "../../../Components/ModalComponents/ProfileModal";
 import WriteLetterModal from "../../../Components/ModalComponents/WriteLetterModal";
 import Hobbies from "../../../Components/Profile/Hobbies";

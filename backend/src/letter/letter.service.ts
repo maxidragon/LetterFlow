@@ -15,12 +15,24 @@ export class LetterService {
           select: {
             id: true,
             username: true,
+            country: {
+              select: {
+                name: true,
+                code: true,
+              },
+            },
           },
         },
         to: {
           select: {
             id: true,
             username: true,
+            country: {
+              select: {
+                name: true,
+                code: true,
+              },
+            },
           },
         },
       },
@@ -135,7 +147,14 @@ export class LetterService {
     });
     return { ok: true, status: 201 };
   }
-  async getDeliveryTime(fromCountry: string, toCountry: string, lat1?: number, lon1?: number, lat2?: number, lon2?: number) {
+  async getDeliveryTime(
+    fromCountry: string,
+    toCountry: string,
+    lat1?: number,
+    lon1?: number,
+    lat2?: number,
+    lon2?: number,
+  ) {
     let distance = 0;
     if (lat1 && lat2 && lon1 && lon2) {
       distance = this.distance(lat1, lon1, lat2, lon2);

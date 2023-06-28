@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import SearchCard from "../../../Components/SearchCard";
+import SearchCard from "../../../Components/Card/SearchCard";
 
 const SearchResult = (props: { users: any[] }) => {
   return (
@@ -13,7 +13,7 @@ const SearchResult = (props: { users: any[] }) => {
           key={user.id}
           id={user.id}
           username={user.username}
-          country={user.country.name}
+          country={user.country}
           gender={user.gender}
         />
       ))}

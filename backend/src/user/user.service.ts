@@ -19,6 +19,7 @@ export class UserService {
         country: {
           select: {
             name: true,
+            code: true,
           },
         },
         gender: true,
@@ -170,6 +171,7 @@ export class UserService {
         country: {
           select: {
             name: true,
+            code: true,
           },
         },
       },

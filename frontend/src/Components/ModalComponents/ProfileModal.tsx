@@ -9,6 +9,7 @@ import Hobbies from "../Profile/Hobbies";
 import CreateIcon from '@mui/icons-material/Create';
 import WriteLetterModal from "./WriteLetterModal";
 import { style } from "./modalStyles";
+import CountryNameWithFlag from "../CountryNameWithFlag";
 
 const ProfileModal = (props: {
   open: boolean;
@@ -42,7 +43,7 @@ const ProfileModal = (props: {
                 </Typography>
               )}
               <Typography variant="h6">
-                Country: {profile.country.name}
+                Country: <CountryNameWithFlag country={profile.country} />
               </Typography>
               <Typography variant="h6">
                 Gender: {profile.gender && (profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1).toLowerCase())}

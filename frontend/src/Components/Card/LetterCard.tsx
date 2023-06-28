@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import {formatDate} from "../logic/other";
+import {formatDate} from "../../logic/other";
 import {useNavigate} from "react-router-dom";
 
 const LetterCard = (props: any) => {
