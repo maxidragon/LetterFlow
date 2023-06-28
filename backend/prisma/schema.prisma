@@ -35,7 +35,8 @@ model User {
   LettersTo              Letter[]                @relation("to")
   lat                    String?
   lon                    String?
-
+  starredBy              StarredUser[]           @relation("starredBy")
+  starredUser            StarredUser[]           @relation("starredUser")
 }
 
 model Letter {
@@ -50,7 +51,7 @@ model Letter {
 }
 
 model Country {
-  id   Int    @id @default(autoincrement())
+  id   Int     @id @default(autoincrement())
   name String
   code String?
   User User[]
@@ -89,6 +90,18 @@ model UserHobby {
   hobbyId Int
   User    User  @relation(fields: [userId], references: [id])
   Hobby   Hobby @relation(fields: [hobbyId], references: [id])
+}
+
+model StarredUser {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "starredUser")
+  starredById Int
+  starredBy   User     @relation(fields: [starredById], references: [id], onDelete: Cascade, name: "starredBy")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, starredById])
 }
 
 enum LetterLengthPreference {

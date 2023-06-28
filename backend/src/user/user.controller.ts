@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Post,
   Put,
   Query,
   UseGuards,
@@ -72,5 +74,13 @@ export class UserController {
       hobbies,
       gender,
     );
+  }
+  @Post('star')
+  async starUser(@GetUser() user: JwtAuthDto, @Body('userId') userId: number) {
+    return this.userService.starUser(userId, user.userId,);
+  }
+  @Delete('unstar/:userId')
+  async unstarUser(@GetUser() user: JwtAuthDto, @Param('userId') userId: number) {
+    return this.userService.unstarUser(userId, user.userId);
   }
 }

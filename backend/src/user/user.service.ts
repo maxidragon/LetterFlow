@@ -177,4 +177,30 @@ export class UserService {
       },
     });
   }
+  async starUser(userId: number, starredById: number) {
+    try {
+      await this.prisma.starredUser.create({
+        data: {
+          starredById: starredById,
+          userId: userId,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+    return { msg: 'User starred successfully' };
+  }
+  async unstarUser(userId: number, starredById: number) {
+    try {
+      await this.prisma.starredUser.deleteMany({
+        where: {
+          userId: userId,
+          starredById: starredById,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+    return { msg: 'User unstarred successfully' };
+  }
 }
