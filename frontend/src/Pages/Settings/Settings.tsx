@@ -7,6 +7,8 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import HobbyModal from "../../Components/ModalComponents/HobbyModal";
@@ -41,11 +43,23 @@ const Settings = () => {
       username: event.target.value,
     });
   };
+
+  const handleAppearInSearchChange = (event: any) => {
+    setSettings({
+      ...settings,
+      appearInSearch: event.target.checked,
+    });
+  };
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const status = await updateSettings(settings);
-    if (status === 200) {
+    const response = await updateSettings(settings);
+    if (response.status === 200) {
       enqueueSnackbar("Settings has been updated", { variant: "success" });
+    } else if (response.status === 400) {
+       response.data.message.forEach((msg: string) => {
+        enqueueSnackbar((msg.charAt(0).toUpperCase() + msg.slice(1)), { variant: "error" });
+      });
     } else {
       enqueueSnackbar("Server error", { variant: "error" });
     }
@@ -103,6 +117,9 @@ const Settings = () => {
                   />
                 </Grid>
                 <Grid item>
+                  <FormControlLabel control={<Checkbox onChange={handleAppearInSearchChange} checked={settings.appearInSearch} />} label="Appear in search" />
+                </Grid>
+                <Grid item>
                   <Button
                     variant="contained"
                     onClick={() => setOpenHobbyModal(true)}
@@ -133,7 +150,7 @@ const Settings = () => {
                   >
                     Change languages
                   </Button>
-                  <LanguageModal 
+                  <LanguageModal
                     open={openLanguageModal}
                     handleClose={() => setOpenLanguageModal(false)}
                   />

@@ -26,7 +26,11 @@ export const getSettings = async () => {
 
 export const updateSettings = async (data: any) => {
     const response = await backendRequest('user/settings', 'PUT', true, data);
-    return response.status;
+    const responseData = await response.json();
+    return {
+        status: response.status,
+        data: responseData,
+    };
 };
 
 export const starUser = async (userId: number) => {

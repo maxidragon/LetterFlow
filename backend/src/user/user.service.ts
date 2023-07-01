@@ -90,6 +90,7 @@ export class UserService {
       select: {
         id: true,
         username: true,
+        appearInSearch: true,
         email: true,
         description: true,
         birthDate: true,
@@ -112,6 +113,7 @@ export class UserService {
           email: dto.email,
           description: dto.description,
           birthDate: dto.birthDate,
+          appearInSearch: dto.appearInSearch,
         },
       });
     } catch (error) {
@@ -169,6 +171,9 @@ export class UserService {
     where['id'] = {
       not: userId,
     };
+    if (!username) {
+      where['appearInSearch'] = true;
+    }
 
     return this.prisma.user.findMany({
       where,

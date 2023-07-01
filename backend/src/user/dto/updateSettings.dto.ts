@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsOptional, IsString, Length } from 'class-validator';
 
 export class UpdateSettingsDto {
   @IsString()
@@ -16,4 +16,8 @@ export class UpdateSettingsDto {
   @IsOptional()
   @IsDate()
   birthDate: Date;
+
+  @IsOptional()
+  @IsBoolean()
+  appearInSearch: boolean;
 }
