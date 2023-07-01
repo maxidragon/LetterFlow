@@ -15,6 +15,7 @@ import Letter from "./Pages/Letter/Letter";
 import Search from './Pages/Search/Search';
 import ErrorElement from './Pages/ErrorElement/ErrorElement';
 import Settings from './Pages/Settings/Settings';
+import About from './Pages/About/About';
 
 const router = createBrowserRouter([
     {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     {
         path: "/settings",
         element: <Layout children={<Settings />} />
+    },
+    {
+        path: "/about",
+        element: <Layout children={<About />}/>
     },
     {
         path: "*",
