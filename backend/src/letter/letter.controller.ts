@@ -5,27 +5,25 @@ import { SendLetterDto } from './dto/sendLetter.dto';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
-  @Get('deliveryTime/:fromCountry/:toCountry')
+  @Get('deliveryTime/:toUser')
   async getDeliveryTime(
-    @Param('fromCountry') fromCountry: string,
-    @Param('toCountry') toCountry: string,
+    @GetUser() user: JwtAuthDto,
+    @Param('toUser') toUser: string,
   ) {
-    return this.letterService.getDeliveryTime(fromCountry, toCountry);
+    return this.letterService.getUserDeliveryTime(user.userId, +toUser);
   }
-  @UseGuards(AuthGuard('jwt'))
   @Post('send')
   async sendLetter(@Body() dto: SendLetterDto, @GetUser() user: JwtAuthDto) {
     return this.letterService.sendLetter(dto, user.userId);
   }
-  @UseGuards(AuthGuard('jwt'))
   @Get('my')
   async getMyConversations(@GetUser() user: JwtAuthDto) {
     return this.letterService.getMyConversations(user.userId);
   }
-  @UseGuards(AuthGuard('jwt'))
   @Get('all/:toId')
   async getAllLetters(
     @Param('toId') toId: number,
@@ -33,7 +31,6 @@ export class LetterController {
   ) {
     return this.letterService.getAllLetters(user.userId, toId);
   }
-  @UseGuards(AuthGuard('jwt'))
   @Get('one/:letterId')
   async getOneLetter(
     @Param('letterId') letterId: number,

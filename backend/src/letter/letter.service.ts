@@ -147,6 +147,28 @@ export class LetterService {
     });
     return { ok: true, status: 201 };
   }
+
+  async getUserDeliveryTime(fromId: number, toId: number) {
+    const from = await this.prisma.user.findUnique({
+      where: { id: fromId },
+      select: { country: true, lat: true, lon: true },
+    });
+    const to = await this.prisma.user.findUnique({
+      where: { id: toId },
+      select: { country: true, lat: true, lon: true },
+    });
+    const deliveryTime = await this.getDeliveryTime(
+      from.country.name,
+      to.country.name,
+      +from.lat,
+      +from.lon,
+      +to.lat,
+      +to.lon,
+    );
+    return {
+      timeInHours: deliveryTime.timeInHours,
+    }
+  }
   async getDeliveryTime(
     fromCountry: string,
     toCountry: string,

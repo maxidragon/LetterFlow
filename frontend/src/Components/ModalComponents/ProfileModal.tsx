@@ -14,6 +14,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { enqueueSnackbar } from "notistack";
 import { getUserInfo } from "../../logic/auth";
+import { getDeliveryTime } from "../../logic/letters";
 const ProfileModal = (props: {
   open: boolean;
   handleClose: any;
@@ -22,14 +23,19 @@ const ProfileModal = (props: {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const [deliveryTime, setDeliveryTime] = useState<number>(0);
+  
   const userInfo = getUserInfo();
   useEffect(() => {
     const getUserProfile = async () => {
       if (props.open) {
         const data = await getProfile(props.userId);
+        const deliveryTime = await getDeliveryTime(props.userId);
         setProfile(data);
+        setDeliveryTime(deliveryTime.timeInHours);
         setLoading(false);
       }
+
     };
     getUserProfile();
   }, [props.userId, props.open]);
@@ -54,8 +60,7 @@ const ProfileModal = (props: {
       ...profile,
       starred: !profile.starred
     });
-
-  }
+  };
   return (
     <>
       <Modal open={props.open} onClose={props.handleClose}>
@@ -86,7 +91,7 @@ const ProfileModal = (props: {
                   profile.gender.charAt(0).toUpperCase() +
                   profile.gender.slice(1).toLowerCase()}
               </Typography>
-              <Typography variant="h6">Letter delivers in 24 hours</Typography>
+              <Typography variant="h6">Letter delivers in {deliveryTime} hours</Typography>
               <Divider />
               <Typography variant="h6">Hobbies:</Typography>
               <Hobbies hobbies={profile.hobbies} />

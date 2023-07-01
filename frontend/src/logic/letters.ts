@@ -30,4 +30,12 @@ export const getLetterById = async (letterId: string | undefined) => {
         return await response.json();
     }
     return null;
-}
+};
+
+export const getDeliveryTime = async (toUser: number) => {
+    const response = await backendRequest(`letter/deliveryTime/${toUser}`, "GET", true);
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return null;
+};
