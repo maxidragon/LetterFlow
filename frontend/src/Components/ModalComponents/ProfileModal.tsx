@@ -13,6 +13,7 @@ import CountryNameWithFlag from "../CountryNameWithFlag";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { enqueueSnackbar } from "notistack";
+import { getUserInfo } from "../../logic/auth";
 const ProfileModal = (props: {
   open: boolean;
   handleClose: any;
@@ -21,12 +22,13 @@ const ProfileModal = (props: {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const userInfo = getUserInfo();
   useEffect(() => {
     const getUserProfile = async () => {
       if (props.open) {
         const data = await getProfile(props.userId);
         setProfile(data);
-        setLoading(false);          
+        setLoading(false);
       }
     };
     getUserProfile();
@@ -39,14 +41,14 @@ const ProfileModal = (props: {
         enqueueSnackbar("User unstarred", { variant: "success" });
       } else {
         enqueueSnackbar("Server error", { variant: "error" });
-      } 
+      }
     } else {
       const status = await starUser(profile.id);
       if (status === 201) {
         enqueueSnackbar("User starred", { variant: "success" });
       } else {
         enqueueSnackbar("Server error", { variant: "error" });
-      } 
+      }
     }
     setProfile({
       ...profile,
@@ -64,9 +66,11 @@ const ProfileModal = (props: {
             <>
               <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <Typography variant="h4">{profile.username}</Typography>
+                {userInfo.id !== profile.id && (
                 <IconButton onClick={handleStar}>
-                 {profile.starred ? <StarIcon /> : <StarBorderIcon />}
+                  {profile.starred ? <StarIcon /> : <StarBorderIcon />}
                 </IconButton>
+                )}
               </Box>
               {profile.birthDate && (
                 <Typography variant="h5">
@@ -80,7 +84,7 @@ const ProfileModal = (props: {
                 Gender:{" "}
                 {profile.gender &&
                   profile.gender.charAt(0).toUpperCase() +
-                    profile.gender.slice(1).toLowerCase()}
+                  profile.gender.slice(1).toLowerCase()}
               </Typography>
               <Typography variant="h6">Letter delivers in 24 hours</Typography>
               <Divider />
@@ -91,10 +95,9 @@ const ProfileModal = (props: {
               {profile.languages.map((language: any) => (
                 <Typography variant="h6">
                   {language.name}{" "}
-                  {`(${
-                    language.level.charAt(0) +
+                  {`(${language.level.charAt(0) +
                     language.level.slice(1).toLowerCase()
-                  })`}
+                    })`}
                 </Typography>
               ))}
               <Divider />
@@ -105,19 +108,23 @@ const ProfileModal = (props: {
                   ? profile.replyTime.toLowerCase()
                   : "No preferences"}
               </Typography>
-              <Button
-                variant="contained"
-                startIcon={<CreateIcon />}
-                onClick={() => setOpen(true)}
-              >
-                Write
-              </Button>
-              <WriteLetterModal
-                receiverName={profile.username}
-                receiverId={profile.id}
-                open={open}
-                handleClose={() => setOpen(false)}
-              />
+              {userInfo.id !== profile.id && (
+                <>
+                  <Button
+                    variant="contained"
+                    startIcon={<CreateIcon />}
+                    onClick={() => setOpen(true)}
+                  >
+                    Write
+                  </Button>
+                  <WriteLetterModal
+                    receiverName={profile.username}
+                    receiverId={profile.id}
+                    open={open}
+                    handleClose={() => setOpen(false)}
+                  />
+                </>
+              )}
             </>
           )}
         </Box>

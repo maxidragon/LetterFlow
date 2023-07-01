@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getSettings, updateSettings } from "../../logic/user";
 import {
   Box,
@@ -15,12 +15,15 @@ import HobbyModal from "../../Components/ModalComponents/HobbyModal";
 import ChangePasswordModal from "../../Components/ModalComponents/ChangePasswordModal";
 import LanguageModal from "../../Components/ModalComponents/LanguageModal";
 import { verifyCountry } from "../../logic/auth";
+import PersonIcon from "@mui/icons-material/Person";
+import ProfileModal from "../../Components/ModalComponents/ProfileModal";
 
 const Settings = () => {
   const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState<boolean>(false);
   const [openLanguageModal, setOpenLanguageModal] = useState<boolean>(false);
   const [settings, setSettings] = useState<any>(null);
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +53,12 @@ const Settings = () => {
       appearInSearch: event.target.checked,
     });
   };
+  const handleDescriptionChange = (event: any) => {
+    setSettings({
+      ...settings,
+      description: event.target.value,
+    });
+  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -57,7 +66,7 @@ const Settings = () => {
     if (response.status === 200) {
       enqueueSnackbar("Settings has been updated", { variant: "success" });
     } else if (response.status === 400) {
-       response.data.message.forEach((msg: string) => {
+      response.data.message.forEach((msg: string) => {
         enqueueSnackbar((msg.charAt(0).toUpperCase() + msg.slice(1)), { variant: "error" });
       });
     } else {
@@ -91,8 +100,18 @@ const Settings = () => {
             <Grid item>
               <Typography variant="h5">Settings</Typography>
             </Grid>
+            <Grid item>
+              <Button variant="contained" endIcon={<PersonIcon />} onClick={() => setShowProfileModal(true)}>
+                Preview profile
+              </Button>
+            </Grid>
             {settings ? (
               <>
+                <ProfileModal
+                  open={showProfileModal}
+                  handleClose={() => setShowProfileModal(false)}
+                  userId={settings.id}
+                />
                 <Grid item>
                   <TextField
                     margin="normal"
@@ -118,6 +137,16 @@ const Settings = () => {
                 </Grid>
                 <Grid item>
                   <FormControlLabel control={<Checkbox onChange={handleAppearInSearchChange} checked={settings.appearInSearch} />} label="Appear in search" />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    multiline
+                    rows={15}
+                    placeholder="Write something about yourself"
+                    fullWidth
+                    value={settings.description}
+                    onChange={handleDescriptionChange}
+                  />
                 </Grid>
                 <Grid item>
                   <Button
