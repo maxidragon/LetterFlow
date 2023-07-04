@@ -7,7 +7,7 @@ enum Level {
   NATIVE = 'NATIVE',
 }
 
-export class AddLanguageDto {
+export class LanguageDto {
   @IsEnum(Level)
   level: Level;
   @IsInt()

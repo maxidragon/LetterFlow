@@ -8,7 +8,7 @@ export class LanguageService {
   async getAllLanguages() {
     return await this.prisma.language.findMany();
   }
-  async getMyLanguages(userId: number) {
+  async getUserLanguages(userId: number) {
     return await this.prisma.userLanguage.findMany({
       where: {
         userId: userId,
@@ -47,4 +47,28 @@ export class LanguageService {
       },
     });
   }
+  async deleteLanguage(userId: number, languageId: number) {
+    return await this.prisma.userLanguage.deleteMany({
+      where: {
+        userId: userId,
+        languageId: languageId,
+      },
+    });
+  }
+  async updateLanguage(
+    userId: number,
+    languageId: number,
+    level: 'BASIC' | 'INTERMEDIATE' | 'FLUENT' | 'NATIVE',
+  ) {
+    return await this.prisma.userLanguage.updateMany({
+      where: {
+        userId: userId,
+        languageId: languageId,
+      },
+      data: {
+        level: level,
+      },
+    });
+  }
+  
 }
