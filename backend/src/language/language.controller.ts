@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LanguageService } from './language.service';
 import { GetUser } from 'src/auth/decorator/getUser.decorator';
@@ -30,6 +30,7 @@ export class LanguageController {
       body.level,
     );
   }
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('delete/:languageId')
   async deleteLanguage(
     @GetUser() user: JwtAuthDto,

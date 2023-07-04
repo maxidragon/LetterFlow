@@ -15,3 +15,17 @@ export const addLanguage = async (languageId: number, level: 'BASIC' | 'INTERMED
     });
     return response.status;
 };
+
+export const removeLanguage = async (languageId: number) => {
+    const response = await backendRequest(`language/delete/${languageId}`, 'DELETE', true);
+    return response.status;
+};
+
+export const updateLanguage = async (languageId: number, level: 'BASIC' | 'INTERMEDIATE' | 'FLUENT' | 'NATIVE') => {
+    console.log(languageId, level);
+    const response = await backendRequest('language/update', 'PUT', true, {
+        languageId: languageId,
+        level: level,
+    });
+    return response.status;
+};
