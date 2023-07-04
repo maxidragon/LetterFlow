@@ -24,6 +24,7 @@ export class UserService {
         },
         gender: true,
         replyTime: true,
+        timezone: true,
       },
     });
     const sendLetters = await this.prisma.letter.count({

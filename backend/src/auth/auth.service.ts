@@ -194,6 +194,7 @@ export class AuthService {
           lat: ipInfo.data.lat.toString(),
           lon: ipInfo.data.lon.toString(),
           countryChangedAt: new Date(),
+          timezone: ipInfo.data.timezone,
         },
       });
       return {
@@ -226,6 +227,7 @@ export class AuthService {
           lat: ipInfo.data.lat.toString(),
           lon: ipInfo.data.lon.toString(),
           countryChangedAt: new Date(),
+          timezone: ipInfo.data.timezone,
         },
       });
       return {

@@ -36,36 +36,31 @@ const Conversation = (props: { receiverId: number }) => {
         const getInfoAboutCountry = async () => {
             if (receiverInfo === null) return;
             const info = await getCountryInfo(receiverInfo.country.name);
-            const localDate = new Date();
-            let offsetSign = info.timezones[0].includes("+") ? 1 : -1;
-            let offsetParts = info.timezones[0].split(/:|UTC/);
-            let utcOffset = (parseInt(offsetParts[1]) + parseInt(offsetParts[2]) / 60) * offsetSign;
-            let utcHour = localDate.getUTCHours() + utcOffset;
-            let utcMinutes = localDate.getUTCMinutes();
-            info.time = ("0" + utcHour).slice(-2) + ":" + ("0" + utcMinutes).slice(-2);
+            const currentTime = new Date().toLocaleString('en-US', { timeZone: receiverInfo.timezone, hour12: false });
+            info.time = currentTime.split(', ')[1].split(':')[0] + ':' + currentTime.split(',')[1].split(':')[1];
             setCountryInfo(info);
         };
         getInfoAboutCountry();
     }, [receiverInfo, receiverInfo?.country.name]);
     return (
         <>
-            <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', height: '100%'}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
                 {receiverInfo && countryInfo &&
                     <Box>
-                        <Typography variant="h4" sx={{cursor: 'pointer'}} onClick={() => setShowProfileModal(true)}>{receiverInfo.username}</Typography>
+                        <Typography variant="h4" sx={{ cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>{receiverInfo.username}</Typography>
                         <Typography variant="h6">{receiverInfo.country.name} ({countryInfo.time})</Typography>
-                        <Hobbies hobbies={receiverInfo.hobbies}/>
+                        <Hobbies hobbies={receiverInfo.hobbies} />
                     </Box>
                 }
                 <Box>
-                    <Button variant="contained" startIcon={<CreateIcon/>} onClick={() => setOpen(true)}>Write</Button>
+                    <Button variant="contained" startIcon={<CreateIcon />} onClick={() => setOpen(true)}>Write</Button>
                     <WriteLetterModal receiverName={receiverInfo?.username} receiverId={props.receiverId} open={open}
-                                      handleClose={() => setOpen(false)}/>
-                    <ProfileModal open={showProfileModal} handleClose={() => setShowProfileModal(false)} userId={props.receiverId}/>
+                        handleClose={() => setOpen(false)} />
+                    <ProfileModal open={showProfileModal} handleClose={() => setShowProfileModal(false)} userId={props.receiverId} />
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap'}}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mt: 10, flexWrap: 'wrap' }}>
                     {letters.map((letter: any) => (
-                        <LetterCard letter={letter} key={letter.id}/>
+                        <LetterCard letter={letter} key={letter.id} />
                     ))}
 
                 </Box>
