@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  Checkbox,
   Chip,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -49,6 +51,8 @@ const Search = () => {
   const [selectedCountries, setSelectedCountries] = useState<any[]>([]);
   const [possibleLanguages, setPossibleLanguages] = useState<any[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<any[]>([]);
+  const [onlyWithDescription, setOnlyWithDescription] = useState<boolean>(false);
+
   const usernameRef: any = useRef();
 
   useEffect(() => {
@@ -91,6 +95,9 @@ const Search = () => {
     const newValue = typeof value === "string" ? value.split(",") : value;
     setSelectedLanguages(newValue);
   };
+  const handleOnlyWithDescriptionChange = (event: any) => {
+    setOnlyWithDescription(event.target.checked);
+  };
 
   const handleSearch = async () => {
     const formattedHobbies = formatNumberArrayToQuery(
@@ -119,6 +126,7 @@ const Search = () => {
     if (formattedLanguages) {
       query += formattedLanguages;
     }
+    query += `description=${onlyWithDescription}`;
     const searchedUsers = await searchUsers(query);
     setSearchResult(searchedUsers);
   };
@@ -151,7 +159,7 @@ const Search = () => {
               renderValue={(selected: any) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {selected.map((value: any) => {
-                    const hobby = possibleHobbies.find(
+                    const hobby = possibleHobbies.find( 
                       (h: any) => h.id === value
                     );
                     return <Chip key={value} label={hobby ? hobby.name : ""} />;
@@ -241,6 +249,7 @@ const Search = () => {
               )}
             </Select>
           </FormControl>
+          <FormControlLabel control={<Checkbox onChange={handleOnlyWithDescriptionChange} checked={onlyWithDescription} />} label="Only with description" />
           <Button
             variant="contained"
             sx={{ mt: 2, width: "100%" }}

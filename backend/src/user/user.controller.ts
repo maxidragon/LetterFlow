@@ -47,6 +47,7 @@ export class UserController {
     @Query('countryIds') countryIds?: number[],
     @Query('hobbies') hobbies?: number[],
     @Query('gender') gender?: string[],
+    @Query('description') description?: boolean,
   ) {
     if (countryIds) {
       if (Array.isArray(countryIds)) {
@@ -75,6 +76,7 @@ export class UserController {
       languages,
       countryIds,
       hobbies,
+      description,
       gender,
     );
   }

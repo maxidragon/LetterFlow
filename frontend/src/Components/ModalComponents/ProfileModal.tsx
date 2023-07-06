@@ -77,6 +77,7 @@ const ProfileModal = (props: {
                 </IconButton>
                 )}
               </Box>
+              <Typography variant="body1">{profile.description}</Typography>
               {profile.birthDate && (
                 <Typography variant="h5">
                   {formatDate(profile.birthDate)}
