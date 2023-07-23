@@ -130,7 +130,7 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
               >
                 {possibleLanguages.map((row: any) => (
                   !myLanguages.some((language) => language.Language.id === row.id) && (
-                    <MenuItem value={row.id}>{row.name}</MenuItem>
+                    <MenuItem value={row.id} key={row.id}>{row.name}</MenuItem>
                   )
                 ))}
               </Select>

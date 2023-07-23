@@ -30,12 +30,13 @@ const HobbyModal = (props: {
     };
     const getMyHobbiesData = async () => {
         const data = await getMyHobbies();
-        console.log(data);  
         setMyHobbies(data);
     }
-    getPossibleHobbies();
-    getMyHobbiesData();
-  }, []);
+    if (props.open) {
+      getPossibleHobbies();
+      getMyHobbiesData();
+    }
+  }, [props.open]);
 
   const handleCheckboxChange = async (hobbyId: number, isChecked: boolean) => {
     if (isChecked) {

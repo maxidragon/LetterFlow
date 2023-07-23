@@ -4,7 +4,6 @@ import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import { getProfile, starUser, unstarUser } from "../../logic/user";
 import { Button, CircularProgress, Divider, IconButton } from "@mui/material";
-import { formatDate } from "../../logic/other";
 import Hobbies from "../Profile/Hobbies";
 import CreateIcon from "@mui/icons-material/Create";
 import WriteLetterModal from "./WriteLetterModal";
@@ -15,6 +14,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { enqueueSnackbar } from "notistack";
 import { getUserInfo } from "../../logic/auth";
 import { getDeliveryTime } from "../../logic/letters";
+import dayjs from "dayjs";
 const ProfileModal = (props: {
   open: boolean;
   handleClose: any;
@@ -24,7 +24,7 @@ const ProfileModal = (props: {
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const [deliveryTime, setDeliveryTime] = useState<number>(0);
-  
+
   const userInfo = getUserInfo();
   useEffect(() => {
     const getUserProfile = async () => {
@@ -72,17 +72,21 @@ const ProfileModal = (props: {
               <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <Typography variant="h4">{profile.username}</Typography>
                 {userInfo.id !== profile.id && (
-                <IconButton onClick={handleStar}>
-                  {profile.starred ? <StarIcon /> : <StarBorderIcon />}
-                </IconButton>
+                  <IconButton onClick={handleStar}>
+                    {profile.starred ? <StarIcon /> : <StarBorderIcon />}
+                  </IconButton>
                 )}
               </Box>
               <Typography variant="body1">{profile.description}</Typography>
-              {profile.birthDate && (
-                <Typography variant="h5">
-                  {formatDate(profile.birthDate)}
+              {profile.showBirthDate === "AGE" ?
+                <Typography variant="h6">
+                  Age: {dayjs(profile.birthDate).diff(dayjs(), 'year') * -1}
                 </Typography>
-              )}
+                : profile.showBirthDate === "DATE" && (
+                  <Typography variant="h6">
+                    Birth date: {dayjs(profile.birthDate).format('DD/MM/YYYY')}
+                  </Typography>
+                )}
               <Typography variant="h6">
                 Country: <CountryNameWithFlag country={profile.country} />
               </Typography>
