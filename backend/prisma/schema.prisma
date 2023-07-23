@@ -39,6 +39,7 @@ model User {
   starredUser            StarredUser[]           @relation("starredUser")
   appearInSearch         Boolean                 @default(true)
   timezone               String?
+  showBirthDate          ShowBirthDate           @default(AGE)
 }
 
 model Letter {
@@ -136,4 +137,10 @@ enum LanguageLevel {
   FLUENT
   INTERMEDIATE
   BASIC
+}
+
+enum ShowBirthDate {
+  AGE
+  DATE
+  NONE
 }

@@ -16,6 +16,7 @@ export class UserService {
         username: true,
         description: true,
         birthDate: true,
+        showBirthDate: true,
         country: {
           select: {
             name: true,
@@ -68,7 +69,9 @@ export class UserService {
         starredById: requesterId,
       },
     });
-
+    if (!userInfo.showBirthDate) {
+      delete userInfo.birthDate;
+    }
     languages.forEach((language: any) => {
       language.name = language.Language.name;
       delete language.Language;
@@ -95,6 +98,7 @@ export class UserService {
         email: true,
         description: true,
         birthDate: true,
+        showBirthDate: true,
         country: {
           select: {
             name: true,
@@ -115,6 +119,7 @@ export class UserService {
           description: dto.description,
           birthDate: dto.birthDate,
           appearInSearch: dto.appearInSearch,
+          showBirthDate: dto.showBirthDate,
         },
       });
     } catch (error) {

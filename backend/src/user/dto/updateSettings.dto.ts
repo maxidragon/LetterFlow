@@ -1,4 +1,10 @@
-import { IsBoolean, IsDate, IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+
+enum ShowBirthDate {
+  AGE = 'AGE',
+  DATE = 'DATE',
+  NONE = 'NONE',
+}
 
 export class UpdateSettingsDto {
   @IsString()
@@ -20,4 +26,7 @@ export class UpdateSettingsDto {
   @IsOptional()
   @IsBoolean()
   appearInSearch: boolean;
+
+  @IsEnum(ShowBirthDate)
+  showBirthDate: ShowBirthDate;
 }
