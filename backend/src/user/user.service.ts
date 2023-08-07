@@ -4,7 +4,7 @@ import { UpdateSettingsDto } from './dto/updateSettings.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: DbService) { }
+  constructor(private readonly prisma: DbService) {}
 
   async getUserProfile(userId: number, requesterId: number) {
     const userInfo = await this.prisma.user.findUnique({
@@ -173,6 +173,11 @@ export class UserService {
             },
           },
         },
+      };
+    }
+    if (gender && gender.length > 0) {
+      where['gender'] = {
+        in: gender,
       };
     }
     where['id'] = {

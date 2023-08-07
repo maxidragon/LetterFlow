@@ -167,7 +167,7 @@ export class LetterService {
     );
     return {
       timeInHours: deliveryTime.timeInHours,
-    }
+    };
   }
   async getDeliveryTime(
     fromCountry: string,

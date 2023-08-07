@@ -1,4 +1,12 @@
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 enum ShowBirthDate {
   AGE = 'AGE',

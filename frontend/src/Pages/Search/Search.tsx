@@ -51,6 +51,7 @@ const Search = () => {
   const [selectedCountries, setSelectedCountries] = useState<any[]>([]);
   const [possibleLanguages, setPossibleLanguages] = useState<any[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<any[]>([]);
+  const [selectedGender, setSelectedGender] = useState<any[]>([]);
   const [onlyWithDescription, setOnlyWithDescription] = useState<boolean>(false);
 
   const usernameRef: any = useRef();
@@ -95,6 +96,11 @@ const Search = () => {
     const newValue = typeof value === "string" ? value.split(",") : value;
     setSelectedLanguages(newValue);
   };
+
+  const handleGenderChange = (event: any) => {
+    const newValues = event.target.value as string[];
+    setSelectedGender(newValues);
+  };
   const handleOnlyWithDescriptionChange = (event: any) => {
     setOnlyWithDescription(event.target.checked);
   };
@@ -112,6 +118,11 @@ const Search = () => {
       selectedLanguages,
       "languages"
     );
+    const formattedGender = formatNumberArrayToQuery(
+      selectedGender,
+      "gender",
+    );
+
     const username = usernameRef.current.value;
     let query = "";
     if (username) {
@@ -125,6 +136,9 @@ const Search = () => {
     }
     if (formattedLanguages) {
       query += formattedLanguages;
+    }
+    if (formattedGender) {
+      query += formattedGender;
     }
     query += `description=${onlyWithDescription}`;
     const searchedUsers = await searchUsers(query);
@@ -159,7 +173,7 @@ const Search = () => {
               renderValue={(selected: any) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {selected.map((value: any) => {
-                    const hobby = possibleHobbies.find( 
+                    const hobby = possibleHobbies.find(
                       (h: any) => h.id === value
                     );
                     return <Chip key={value} label={hobby ? hobby.name : ""} />;
@@ -247,6 +261,45 @@ const Search = () => {
                   </MenuItem>
                 )
               )}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ mt: 2, width: "100%" }}>
+            <InputLabel id="gender-label">Gender</InputLabel>
+            <Select
+              labelId="gender-label"
+              multiple
+              value={selectedGender}
+              onChange={handleGenderChange}
+              input={<OutlinedInput label="Chip" />}
+              renderValue={(selected: any) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value: any) => {
+                    return (
+                      <Chip key={value} label={value === "MALE" ? "Male" : value === "FEMALE" ? "Female" : "Other"} />
+                    );
+                  })}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              <MenuItem
+                key={"FEMALE"}
+                value={"FEMALE"}
+              >
+                Female
+              </MenuItem>
+              <MenuItem
+                key={"MALE"}
+                value={"MALE"}
+              >
+                Male
+              </MenuItem>
+              <MenuItem
+                key={"OTHER"}
+                value={"OTHER"}
+              >
+                Other
+              </MenuItem>
             </Select>
           </FormControl>
           <FormControlLabel control={<Checkbox onChange={handleOnlyWithDescriptionChange} checked={onlyWithDescription} />} label="Only with description" />

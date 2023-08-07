@@ -161,18 +161,6 @@ export class AuthService {
   }
   async verifyCountry(userId: number, ip: string) {
     const ipInfo = await axios.get(`http://ip-api.com/json/${ip}`);
-    const userInfo = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        country: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
     const correctCountry = await this.prisma.country.findFirst({
       where: {
         name: {

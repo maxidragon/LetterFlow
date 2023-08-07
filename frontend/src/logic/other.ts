@@ -7,7 +7,7 @@ export const formatDate = (date: Date) => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
-export const formatNumberArrayToQuery = (array: number[], queryName: string) => {
+export const formatNumberArrayToQuery = (array: any[], queryName: string) => {
     let query = '';
     for (let i = 0; i < array.length; i++) {
         query += `${queryName}=${array[i]}&`;

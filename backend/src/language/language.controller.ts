@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LanguageService } from './language.service';
 import { GetUser } from 'src/auth/decorator/getUser.decorator';
@@ -39,15 +50,11 @@ export class LanguageController {
     return await this.languageService.deleteLanguage(user.userId, languageId);
   }
   @Put('update')
-  async updateLanguage(
-    @GetUser() user: JwtAuthDto,
-    @Body() body: LanguageDto,
-  ) {
+  async updateLanguage(@GetUser() user: JwtAuthDto, @Body() body: LanguageDto) {
     return await this.languageService.updateLanguage(
       user.userId,
       body.languageId,
       body.level,
     );
   }
-  
 }
