@@ -4,7 +4,7 @@ import LoginPartial from "./LoginPartial";
 import { getUserInfo } from "../logic/auth";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Navbar = (props: any) => {
+const Navbar = () => {
   const user = getUserInfo();
   return (
     <AppBar position="static" color="primary">

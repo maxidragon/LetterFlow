@@ -13,7 +13,7 @@ export class HobbyService {
     });
   }
   async getMyHobbies(userId: number) {
-    return await this.prisma.userHobby.findMany({
+    const hobbies = await this.prisma.userHobby.findMany({
       where: {
         userId: userId,
       },
@@ -26,6 +26,7 @@ export class HobbyService {
         },
       },
     });
+    return hobbies.map((hobby) => hobby.Hobby);
   }
   async addHobby(userId: number, hobbyId: number) {
     return await this.prisma.userHobby.create({

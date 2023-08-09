@@ -2,7 +2,9 @@ import Navbar from "./Navbar";
 import React from "react";
 import Copyright from "./Copyright";
 
-const Layout = (props: any) => {
+const Layout = (props: {
+    children: React.ReactNode;
+}) => {
     return (
         <>
             <Navbar/>

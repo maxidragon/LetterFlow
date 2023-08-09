@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import SearchCard from "../../../Components/Card/SearchCard";
 import PaginationFooter from "../../../Components/PaginationFooter";
+import { User } from "../../../logic/interfaces";
 
 const SearchResult = (props: {
-  users: any[],
+  users: User[],
   page: number;
   totalPages: number;
   handlePageChange: (page: number) => void;
@@ -14,7 +15,7 @@ const SearchResult = (props: {
         Results
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'row', mt: 3, flexWrap: 'wrap', overflow: 'auto', height: '70vh' }}>
-        {props.users.map((user: any) => (
+        {props.users.map((user: User) => (
           <SearchCard
             key={user.id}
             id={user.id}

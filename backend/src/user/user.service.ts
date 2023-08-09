@@ -45,6 +45,7 @@ export class UserService {
       select: {
         Hobby: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -76,7 +77,7 @@ export class UserService {
       language.name = language.Language.name;
       delete language.Language;
     });
-    const hobbies = hobbiesObjects.map((hobby: any) => hobby.Hobby.name);
+    const hobbies = hobbiesObjects.map((hobby: any) => hobby.Hobby);
     const profile: any = userInfo;
     profile.starred = !!star;
     profile.sendLetters = sendLetters;
@@ -253,7 +254,7 @@ export class UserService {
     return { msg: 'User unstarred successfully' };
   }
   async getMyStarredUsers(userId: number) {
-    return await this.prisma.starredUser.findMany({
+    const users = await this.prisma.starredUser.findMany({
       where: {
         starredById: userId,
       },
@@ -272,5 +273,6 @@ export class UserService {
         },
       },
     });
+    return users.map((user) => user.User);
   }
 }

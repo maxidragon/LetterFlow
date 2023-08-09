@@ -5,11 +5,12 @@ import {List, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material"
 import Avatar from "@mui/material/Avatar";
 import {getUserInfo} from "../logic/auth";
 import CountryNameWithFlag from "./CountryNameWithFlag";
+import { Converstation } from "../logic/interfaces";
 
 const ConversationsList = () => {
     const navigate = useNavigate();
     const user = getUserInfo();
-    const [conversations, setConversations] = useState<any>([]);
+    const [conversations, setConversations] = useState<Converstation[]>([]);
     useEffect(() => {
         const getConversations = async () => {
             const conversations = await getMyConversations();
@@ -21,7 +22,7 @@ const ConversationsList = () => {
     return (
         <>
             <List>
-                {conversations.map((conversation: any) => (
+                {conversations.map((conversation: Converstation) => (
                     <ListItemButton onClick={() => navigate(`/chat/${conversation.to.id === user.id ? conversation.from.id : conversation.to.id}`)}>
                         <ListItemAvatar>
                             <Avatar alt="Profile Picture"/>

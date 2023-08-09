@@ -7,7 +7,7 @@ export const formatDate = (date: Date) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
-export const formatNumberArrayToQuery = (array: any[], queryName: string) => {
+export const formatArrayToQuery = (array: any[], queryName: string) => {
   let query = "";
   for (let i = 0; i < array.length; i++) {
     query += `${queryName}=${array[i]}&`;
@@ -19,17 +19,17 @@ export const calculateTotalPages = (count: number, perPage: number): number => {
   return Math.ceil(count / perPage);
 };
 
-export const formatSearchQuery = (selectedHobbies: any, selectedCountries: any, selectedLanguages: any, selectedGender: any, username: string, onlyWithDescription: boolean, page: number, perPage: number) => {
-  const formattedHobbies = formatNumberArrayToQuery(selectedHobbies, "hobbies");
-  const formattedCountries = formatNumberArrayToQuery(
+export const formatSearchQuery = (selectedHobbies: number[], selectedCountries: number[], selectedLanguages: number[], selectedGender: string[], username: string, onlyWithDescription: boolean, page: number, perPage: number) => {
+  const formattedHobbies = formatArrayToQuery(selectedHobbies, "hobbies");
+  const formattedCountries = formatArrayToQuery(
     selectedCountries,
     "countries"
   );
-  const formattedLanguages = formatNumberArrayToQuery(
+  const formattedLanguages = formatArrayToQuery(
     selectedLanguages,
     "languages"
   );
-  const formattedGender = formatNumberArrayToQuery(selectedGender, "gender");
+  const formattedGender = formatArrayToQuery(selectedGender, "gender");
 
   let query = "";
   if (username !== "") {

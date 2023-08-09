@@ -18,10 +18,10 @@ import {
   getAllHobbies,
   getAllLanguages,
 } from "../../logic/selectValues";
-import { useTheme } from "@emotion/react";
 import { calculateTotalPages, formatSearchQuery } from "../../logic/other";
 import { searchUsers } from "../../logic/user";
 import SearchResult from "./SearchResult/SearchResult";
+import { Country, Hobby, Language, User } from "../../logic/interfaces";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -33,30 +33,20 @@ const MenuProps = {
     },
   },
 };
-function getStyles(name: string, hobbies: string[], theme: any) {
-  return {
-    fontWeight:
-      hobbies.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const Search = () => {
   const perPage = 10;
-  const theme = useTheme();
-  const [searchResult, setSearchResult] = useState<any[]>([]);
-  const [possibleHobbies, setPossibleHobbies] = useState<any[]>([]);
-  const [selectedHobbies, setSelectedHobbies] = useState<any[]>([]);
-  const [possibleCountries, setPossibleCountries] = useState<any[]>([]);
-  const [selectedCountries, setSelectedCountries] = useState<any[]>([]);
-  const [possibleLanguages, setPossibleLanguages] = useState<any[]>([]);
-  const [selectedLanguages, setSelectedLanguages] = useState<any[]>([]);
-  const [selectedGender, setSelectedGender] = useState<any[]>([]);
+  const [searchResult, setSearchResult] = useState<User[]>([]);
+  const [possibleHobbies, setPossibleHobbies] = useState<Hobby[]>([]);
+  const [selectedHobbies, setSelectedHobbies] = useState<number[]>([]);
+  const [possibleCountries, setPossibleCountries] = useState<Country[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<number[]>([]);
+  const [possibleLanguages, setPossibleLanguages] = useState<Language[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<number[]>([]);
+  const [selectedGender, setSelectedGender] = useState<string[]>([]);
   const [onlyWithDescription, setOnlyWithDescription] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
-
 
   const usernameRef: any = useRef();
 
@@ -123,10 +113,12 @@ const Search = () => {
     const searchedUsers = await searchUsers(query);
     setPage(1);
     const total = calculateTotalPages(searchedUsers.count, perPage);
-    setTotalPages(total); 
+    setTotalPages(total);
     setSearchResult(searchedUsers.users);
+
+
   };
-  
+
   const handlePageChange = async (pageParam: number) => {
     setPage(pageParam);
     const query = formatSearchQuery(
@@ -167,11 +159,11 @@ const Search = () => {
               value={selectedHobbies}
               onChange={handleHobbySelectChange}
               input={<OutlinedInput label="Chip" />}
-              renderValue={(selected: any) => (
+              renderValue={(selected: number[]) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value: any) => {
+                  {selected.map((value: number) => {
                     const hobby = possibleHobbies.find(
-                      (h: any) => h.id === value
+                      (h: Hobby) => h.id === value
                     );
                     return <Chip key={value} label={hobby ? hobby.name : ""} />;
                   })}
@@ -183,7 +175,6 @@ const Search = () => {
                 <MenuItem
                   key={hobby.id}
                   value={hobby.id}
-                  style={getStyles(hobby.name, selectedHobbies, theme)}
                 >
                   {hobby.name}
                 </MenuItem>
@@ -198,11 +189,11 @@ const Search = () => {
               value={selectedCountries}
               onChange={handleCountrySelectChange}
               input={<OutlinedInput label="Chip" />}
-              renderValue={(selected: any) => (
+              renderValue={(selected: number[]) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value: any) => {
+                  {selected.map((value: number) => {
                     const country = possibleCountries.find(
-                      (c: any) => c.id === value
+                      (c: Country) => c.id === value
                     );
                     return (
                       <Chip key={value} label={country ? country.name : ""} />
@@ -213,11 +204,10 @@ const Search = () => {
               MenuProps={MenuProps}
             >
               {possibleCountries.map(
-                (country: { id: number; name: string }) => (
+                (country: Country) => (
                   <MenuItem
                     key={country.id}
                     value={country.id}
-                    style={getStyles(country.name, selectedHobbies, theme)}
                   >
                     {country.name}
                   </MenuItem>
@@ -233,11 +223,11 @@ const Search = () => {
               value={selectedLanguages}
               onChange={handleLanguageSelectChange}
               input={<OutlinedInput label="Chip" />}
-              renderValue={(selected: any) => (
+              renderValue={(selected: number[]) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value: any) => {
+                  {selected.map((value: number) => {
                     const language = possibleLanguages.find(
-                      (c: any) => c.id === value
+                      (c: Language) => c.id === value
                     );
                     return (
                       <Chip key={value} label={language ? language.name : ""} />
@@ -252,7 +242,6 @@ const Search = () => {
                   <MenuItem
                     key={language.id}
                     value={language.id}
-                    style={getStyles(language.name, selectedHobbies, theme)}
                   >
                     {language.name}
                   </MenuItem>
@@ -268,9 +257,9 @@ const Search = () => {
               value={selectedGender}
               onChange={handleGenderChange}
               input={<OutlinedInput label="Chip" />}
-              renderValue={(selected: any) => (
+              renderValue={(selected: string[]) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value: any) => {
+                  {selected.map((value: string) => {
                     return (
                       <Chip key={value} label={value === "MALE" ? "Male" : value === "FEMALE" ? "Female" : "Other"} />
                     );

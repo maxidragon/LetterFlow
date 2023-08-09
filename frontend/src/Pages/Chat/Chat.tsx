@@ -5,9 +5,9 @@ import Conversation from "./Conversation/Conversation";
 import EmailIcon from "@mui/icons-material/Email";
 import StarIcon from "@mui/icons-material/Star";
 import { IconButton } from "@mui/material";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import StarredUsersList from "../../Components/StarredUsersList";
-const Chat = (props: { noConversation: boolean; children?: any }) => {
+const Chat = (props: { noConversation: boolean; children?: ReactNode }) => {
   const { receiverId } = useParams<{ receiverId: string }>();
   const [showConversation, setShowConversation] = useState<boolean>(true);
   return (

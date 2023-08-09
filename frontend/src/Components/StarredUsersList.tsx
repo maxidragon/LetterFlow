@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { getMyStarredUsers } from "../logic/user";
 import { List } from "@mui/material";
 import StarredUser from "./StarredUser";
+import { User } from "../logic/interfaces";
 
 const StarredUsersList = () => {
-  const [starredUsers, setStarredUsers] = useState<any[]>([]);
+  const [starredUsers, setStarredUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const getStarredUsers = async () => {
@@ -18,8 +19,8 @@ const StarredUsersList = () => {
   return (
         <>
             <List>
-                {starredUsers.map((user: any) => (
-                    <StarredUser key={user.User.id} user={user.User} />
+                {starredUsers.map((user: User) => (
+                    <StarredUser key={user.id} user={user} />
                 ))}
             </List>
         </>

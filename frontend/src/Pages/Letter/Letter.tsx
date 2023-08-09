@@ -6,15 +6,15 @@ import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import {formatDate} from "../../logic/other";
+import { Letter as LetterInterface } from "../../logic/interfaces";
 
 const Letter = () => {
     const {letterId} = useParams<{ letterId: string }>();
-    const [letter, setLetter] = useState<any>(null);
+    const [letter, setLetter] = useState<LetterInterface|null>(null);
 
     useEffect(() => {
         const getLetter = async () => {
             const letter = await getLetterById(letterId);
-            console.log(letter);
             letter.sendAt = formatDate(new Date(letter.sendAt));
             letter.deliveredAt = formatDate(new Date(letter.deliveredAt));
             setLetter(letter);
@@ -35,7 +35,7 @@ const Letter = () => {
                                 {letter.from.username}
                             </Typography>
                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                                Send at: {letter.sentAt}
+                                Send at: {letter.sendAt}
                             </Typography>
                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                 Delivered at: {letter.deliveredAt}

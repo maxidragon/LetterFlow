@@ -3,8 +3,12 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {formatDate} from "../../logic/other";
 import {useNavigate} from "react-router-dom";
+import { Letter } from '../../logic/interfaces';
 
-const LetterCard = (props: any) => {
+const LetterCard = (props: {
+    letter: Letter;
+}) => {
+    console.log(props.letter);
     const navigate = useNavigate();
     const sendAt = formatDate(new Date(props.letter.sendAt));
     const deliveredAt = formatDate(new Date(props.letter.deliveredAt));

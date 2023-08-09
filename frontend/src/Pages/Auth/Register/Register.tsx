@@ -24,7 +24,7 @@ import {enqueueSnackbar} from "notistack";
 
 const theme = createTheme();
 
-export default function Register() {
+const Register = () => {
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -167,4 +167,6 @@ export default function Register() {
             </Grid>
         </ThemeProvider>
     );
-}
+};
+
+export default Register;

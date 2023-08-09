@@ -13,7 +13,7 @@ import { style } from "./modalStyles";
 const WriteLetterModal = (props: { receiverName: string, receiverId: number, open: boolean, handleClose: any }) => {
     const confirm = useConfirm();
     const contentRef: any = useRef();
-
+    console.log(typeof props.handleClose);
     const handleSend = async () => {
         confirm({description: "You can't edit or delete this letter"})
             .then(async () => {

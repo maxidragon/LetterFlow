@@ -25,11 +25,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from "material-ui-confirm";
 import LanguageLevelSelect from "../SelectComponents/LanguageLevelSelect";
 import EditLanguageModal from "./EditLanguageModal";
+import { Language, UserLanguage } from "../../logic/interfaces";
 
 const LanguageModal = (props: { open: boolean; handleClose: any }) => {
   const confirm = useConfirm();
-  const [possibleLanguages, setPossibleLanguages] = useState<any[]>([]);
-  const [myLanguages, setMyLanguages] = useState<any[]>([]);
+  const [possibleLanguages, setPossibleLanguages] = useState<Language[]>([]);
+  const [myLanguages, setMyLanguages] = useState<UserLanguage[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
   const [selectedLevel, setSelectedLevel] = useState<any>(null);
   const [editedLanguage, setEditedLanguage] = useState<any>(null);
@@ -47,7 +48,7 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
     getMyLanguagesData();
   }, []);
   const handleLanguageChange = (event: SelectChangeEvent) => {
-    setSelectedLanguage(event.target.value);
+    setSelectedLanguage(+event.target.value);
   };
   const handleLevelChange = (event: SelectChangeEvent) => {
     setSelectedLevel(event.target.value);
@@ -81,7 +82,7 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
         <Box sx={style}>
           <Typography variant="h6">My languages</Typography>
           <List>
-            {myLanguages.map((row: any) => (
+            {myLanguages.map((row: UserLanguage) => (
               <>
                 <ListItem
                   secondaryAction={
@@ -93,13 +94,13 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
                         <EditIcon />
                       </IconButton>
                       <IconButton edge="end" aria-label="delete" onClick={() => {
-                        handleDeleteLanguage(row.Language.id);
+                        handleDeleteLanguage(row.id);
                       }}>
                         <DeleteIcon />
                       </IconButton>
                     </>
                   }
-                  key={row.Language.id}
+                  key={row.id}
                 >
                   <ListItemAvatar>
                     <Avatar>
@@ -107,7 +108,7 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={row.Language.name}
+                    primary={row.name}
                     secondary={row.level}
                   />
                 </ListItem>
@@ -128,8 +129,8 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
                 value={selectedLanguage}
                 onChange={handleLanguageChange}
               >
-                {possibleLanguages.map((row: any) => (
-                  !myLanguages.some((language) => language.Language.id === row.id) && (
+                {possibleLanguages.map((row: Language) => (
+                  !myLanguages.some((language) => language.id === row.id) && (
                     <MenuItem value={row.id} key={row.id}>{row.name}</MenuItem>
                   )
                 ))}

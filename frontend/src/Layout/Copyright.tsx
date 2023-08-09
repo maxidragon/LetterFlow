@@ -5,10 +5,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
-function Copyright(props: any) {
+const Copyright = () => {
     return (
         <>
-            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            <Typography variant="body2" color="text.secondary" align="center">
                 <Link
                     component={RouterLink}
                     to={'/'}
@@ -18,7 +18,7 @@ function Copyright(props: any) {
                 </Link>
 
             </Typography>
-            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            <Typography variant="body2" color="text.secondary" align="center">
                 <Link
                     component={RouterLink}
                     to={'/about'}
@@ -28,7 +28,7 @@ function Copyright(props: any) {
                 </Link>
             </Typography>
 
-            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            <Typography variant="body2" color="text.secondary" align="center">
                 Made with <FavoriteIcon sx={{ color: 'red', verticalAlign: 'middle', }} /> by{' '}
                 <Link
                     href="https://github.com/maxidragon"

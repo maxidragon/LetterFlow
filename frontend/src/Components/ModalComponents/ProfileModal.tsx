@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { getUserInfo } from "../../logic/auth";
 import { getDeliveryTime } from "../../logic/letters";
 import dayjs from "dayjs";
+import { UserLanguage } from "../../logic/interfaces";
 const ProfileModal = (props: {
   open: boolean;
   handleClose: any;
@@ -30,6 +31,7 @@ const ProfileModal = (props: {
     const getUserProfile = async () => {
       if (props.open) {
         const data = await getProfile(props.userId);
+        console.log(data);
         const deliveryTime = await getDeliveryTime(props.userId);
         setProfile(data);
         setDeliveryTime(deliveryTime.timeInHours);
@@ -102,7 +104,7 @@ const ProfileModal = (props: {
               <Hobbies hobbies={profile.hobbies} />
               <Divider />
               <Typography variant="h6">Languages:</Typography>
-              {profile.languages.map((language: any) => (
+              {profile.languages.map((language: UserLanguage) => (
                 <Typography variant="h6">
                   {language.name}{" "}
                   {`(${language.level.charAt(0) +

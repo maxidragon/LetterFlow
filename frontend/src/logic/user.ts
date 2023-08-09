@@ -1,3 +1,4 @@
+import { Settings } from "./interfaces";
 import { backendRequest } from "./request";
 
 export const getProfile = async (userId: number) => {
@@ -24,7 +25,8 @@ export const getSettings = async () => {
     return null;
 };
 
-export const updateSettings = async (data: any) => {
+export const updateSettings = async (data: Settings) => {
+    console.log(data);
     const response = await backendRequest('user/settings', 'PUT', true, data);
     const responseData = await response.json();
     return {

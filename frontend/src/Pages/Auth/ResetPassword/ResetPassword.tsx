@@ -8,7 +8,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {resetPassword} from "../../../logic/auth";
 
 
-function ResetPassword() {
+const ResetPassword = () => {
     const {resetId} = useParams<{ resetId: string }>();
     const navigate = useNavigate();
     const newPasswordRef: any = useRef();
