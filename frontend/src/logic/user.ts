@@ -26,7 +26,6 @@ export const getSettings = async () => {
 };
 
 export const updateSettings = async (data: Settings) => {
-    console.log(data);
     const response = await backendRequest('user/settings', 'PUT', true, data);
     const responseData = await response.json();
     return {

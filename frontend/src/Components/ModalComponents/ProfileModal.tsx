@@ -31,7 +31,6 @@ const ProfileModal = (props: {
     const getUserProfile = async () => {
       if (props.open) {
         const data = await getProfile(props.userId);
-        console.log(data);
         const deliveryTime = await getDeliveryTime(props.userId);
         setProfile(data);
         setDeliveryTime(deliveryTime.timeInHours);

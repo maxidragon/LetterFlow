@@ -26,8 +26,6 @@ export const registerUser = async (email: FormDataEntryValue | null, username: F
             ip: userIp
         };
         const response = await backendRequest("auth/register", "POST", false, body);
-        console.log(body);
-        console.log(response);
         return response.text();
     } catch (error) {
         console.log(error);

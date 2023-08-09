@@ -8,7 +8,6 @@ import { Letter } from '../../logic/interfaces';
 const LetterCard = (props: {
     letter: Letter;
 }) => {
-    console.log(props.letter);
     const navigate = useNavigate();
     const sendAt = formatDate(new Date(props.letter.sendAt));
     const deliveredAt = formatDate(new Date(props.letter.deliveredAt));

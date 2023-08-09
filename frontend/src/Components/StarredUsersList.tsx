@@ -10,7 +10,6 @@ const StarredUsersList = () => {
   useEffect(() => {
     const getStarredUsers = async () => {
       const starredUsers = await getMyStarredUsers();
-      console.log(starredUsers);
       setStarredUsers(starredUsers);
     };
     getStarredUsers();

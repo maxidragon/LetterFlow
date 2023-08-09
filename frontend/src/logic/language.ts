@@ -22,7 +22,6 @@ export const removeLanguage = async (languageId: number) => {
 };
 
 export const updateLanguage = async (languageId: number, level: 'BASIC' | 'INTERMEDIATE' | 'FLUENT' | 'NATIVE') => {
-    console.log(languageId, level);
     const response = await backendRequest('language/update', 'PUT', true, {
         languageId: languageId,
         level: level,

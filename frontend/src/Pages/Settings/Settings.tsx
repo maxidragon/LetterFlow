@@ -67,7 +67,6 @@ const Settings = () => {
       });
     } else if (newValue !== null) {
       const date = new Date(newValue);
-      console.log(date);
       setSettings({
         ...settings,
         birthDate: date,

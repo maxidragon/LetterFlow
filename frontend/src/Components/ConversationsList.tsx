@@ -14,7 +14,6 @@ const ConversationsList = () => {
     useEffect(() => {
         const getConversations = async () => {
             const conversations = await getMyConversations();
-            console.log(conversations);
             setConversations(conversations);
         };
         getConversations();

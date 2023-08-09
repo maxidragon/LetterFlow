@@ -136,7 +136,6 @@ export class LetterService {
     const deliveryDate = new Date().setHours(
       sendDate.getHours() + deliveryTime.timeInHours,
     );
-    console.log(deliveryDate);
     await this.prisma.letter.create({
       data: {
         content: dto.content,

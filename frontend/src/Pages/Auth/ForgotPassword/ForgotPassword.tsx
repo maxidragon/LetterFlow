@@ -16,7 +16,6 @@ import {enqueueSnackbar} from "notistack";
 const ForgotPassword = () => {
     const emailRef: any = useRef();
     const handleSubmit = async () => {
-        console.log(emailRef.current.value);
         if (emailRef.current.value === '') {
             return;
         } else {

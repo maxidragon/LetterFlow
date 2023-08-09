@@ -26,7 +26,6 @@ const Conversation = (props: { receiverId: number }) => {
 
         const getLetters = async () => {
             const lettersList = await getLettersFromConversations(props.receiverId);
-            console.log(lettersList);
             setLetters(lettersList);
         };
         getReceiverInfo();
