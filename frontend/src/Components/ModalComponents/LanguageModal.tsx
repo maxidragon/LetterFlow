@@ -31,8 +31,8 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
   const confirm = useConfirm();
   const [possibleLanguages, setPossibleLanguages] = useState<Language[]>([]);
   const [myLanguages, setMyLanguages] = useState<UserLanguage[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
-  const [selectedLevel, setSelectedLevel] = useState<any>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<any>(undefined);
+  const [selectedLevel, setSelectedLevel] = useState<any>(undefined);
   const [editedLanguage, setEditedLanguage] = useState<any>(null);
   const [openEditLanguageModal, setOpenEditLanguageModal] = useState<boolean>(false);
   const getMyLanguagesData = async () => {
@@ -83,7 +83,6 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
           <Typography variant="h6">My languages</Typography>
           <List>
             {myLanguages.map((row: UserLanguage) => (
-              <>
                 <ListItem
                   secondaryAction={
                     <>
@@ -112,7 +111,6 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
                     secondary={row.level}
                   />
                 </ListItem>
-              </>
             ))}
           </List>
           <Box

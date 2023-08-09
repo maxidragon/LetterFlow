@@ -58,6 +58,7 @@ export class UserService {
       select: {
         Language: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -75,6 +76,7 @@ export class UserService {
     }
     languages.forEach((language: any) => {
       language.name = language.Language.name;
+      language.id = language.Language.id;
       delete language.Language;
     });
     const hobbies = hobbiesObjects.map((hobby: any) => hobby.Hobby);

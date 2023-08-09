@@ -22,7 +22,7 @@ const ConversationsList = () => {
         <>
             <List>
                 {conversations.map((conversation: Converstation) => (
-                    <ListItemButton onClick={() => navigate(`/chat/${conversation.to.id === user.id ? conversation.from.id : conversation.to.id}`)}>
+                    <ListItemButton onClick={() => navigate(`/chat/${conversation.to.id === user.id ? conversation.from.id : conversation.to.id}`)} key={conversation.id}>
                         <ListItemAvatar>
                             <Avatar alt="Profile Picture"/>
                         </ListItemAvatar>

@@ -34,6 +34,7 @@ const Conversation = (props: { receiverId: number }) => {
     useEffect(() => {
         const getInfoAboutCountry = () => {
             if (receiverInfo === null || receiverInfo === undefined) return;
+            
             const time = getCountryTime(receiverInfo.timezone);
             setCountryTime(time);
         };
@@ -61,7 +62,6 @@ const Conversation = (props: { receiverId: number }) => {
                     {letters.map((letter: Letter) => (
                         <LetterCard letter={letter} key={letter.id} />
                     ))}
-
                 </Box>
 
             </Box>

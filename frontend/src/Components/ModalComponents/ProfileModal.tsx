@@ -104,7 +104,7 @@ const ProfileModal = (props: {
               <Divider />
               <Typography variant="h6">Languages:</Typography>
               {profile.languages.map((language: UserLanguage) => (
-                <Typography variant="h6">
+                <Typography variant="h6" key={language.id}>
                   {language.name}{" "}
                   {`(${language.level.charAt(0) +
                     language.level.slice(1).toLowerCase()

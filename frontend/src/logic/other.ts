@@ -19,16 +19,19 @@ export const calculateTotalPages = (count: number, perPage: number): number => {
   return Math.ceil(count / perPage);
 };
 
-export const formatSearchQuery = (selectedHobbies: number[], selectedCountries: number[], selectedLanguages: number[], selectedGender: string[], username: string, onlyWithDescription: boolean, page: number, perPage: number) => {
+export const formatSearchQuery = (
+  selectedHobbies: number[],
+  selectedCountries: number[],
+  selectedLanguages: number[],
+  selectedGender: string[],
+  username: string,
+  onlyWithDescription: boolean,
+  page: number,
+  perPage: number
+) => {
   const formattedHobbies = formatArrayToQuery(selectedHobbies, "hobbies");
-  const formattedCountries = formatArrayToQuery(
-    selectedCountries,
-    "countries"
-  );
-  const formattedLanguages = formatArrayToQuery(
-    selectedLanguages,
-    "languages"
-  );
+  const formattedCountries = formatArrayToQuery(selectedCountries, "countries");
+  const formattedLanguages = formatArrayToQuery(selectedLanguages, "languages");
   const formattedGender = formatArrayToQuery(selectedGender, "gender");
 
   let query = "";

@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Typography, IconButton } from "@mui/material";
+import { TableRow, TableCell, Typography, IconButton, Box } from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ const PaginationFooter = (props: {
 }) => {
     const [isPreviousPageDisabled, setIsPreviousPageDisabled] = useState<boolean>(false);
     const [isNextPageDisabled, setIsNextPageDisabled] = useState<boolean>(false);
-    
+
     useEffect(() => {
         setIsPreviousPageDisabled(props.page === 1);
         setIsNextPageDisabled(props.page === props.totalPages);
@@ -29,13 +29,11 @@ const PaginationFooter = (props: {
     };
 
     return (
-        <TableRow>
-            <TableCell colSpan={3} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', borderBottom: 'none' }}>
-                <IconButton onClick={previousPage} disabled={isPreviousPageDisabled}><NavigateBeforeIcon /></IconButton>
-                <Typography>Page {props.page} of {props.totalPages}</Typography>
-                <IconButton onClick={nextPage} disabled={isNextPageDisabled}><NavigateNextIcon /></IconButton>
-            </TableCell>
-        </TableRow>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', borderBottom: 'none' }}>
+            <IconButton onClick={previousPage} disabled={isPreviousPageDisabled}><NavigateBeforeIcon /></IconButton>
+            <Typography>Page {props.page} of {props.totalPages}</Typography>
+            <IconButton onClick={nextPage} disabled={isNextPageDisabled}><NavigateNextIcon /></IconButton>
+        </Box>
     )
 };
 

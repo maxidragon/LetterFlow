@@ -18,22 +18,22 @@ const Navbar = () => {
           sx={{ textDecoration: "none" }}
         >
           LetterFlow
-          {user && (
-            <>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ ml: 2 }}
-                component={Link}
-                to={`/search`}
-              >
-                <SearchIcon />
-              </IconButton>
-            </>
-          )}
         </Typography>
+        {user && (
+          <>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ ml: 2 }}
+              component={Link}
+              to={`/search`}
+            >
+              <SearchIcon />
+            </IconButton>
+          </>
+        )}
         <LoginPartial />
       </Toolbar>
     </AppBar>
