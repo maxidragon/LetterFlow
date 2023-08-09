@@ -48,6 +48,8 @@ export class UserController {
     @Query('hobbies') hobbies?: number[],
     @Query('gender') gender?: string[],
     @Query('description') description?: boolean,
+    @Query('skip') skip?: number,
+    @Query('take') take?: number,
   ) {
     if (countryIds) {
       if (Array.isArray(countryIds)) {
@@ -78,6 +80,8 @@ export class UserController {
       hobbies,
       description,
       gender,
+      skip,
+      take,
     );
   }
   @Post('star')

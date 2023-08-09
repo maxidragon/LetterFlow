@@ -135,7 +135,15 @@ export class UserService {
     hobbies?: number[],
     onlyWithDescription?: boolean,
     gender?: string[],
+    skip?: number,
+    take?: number,
   ) {
+    if (!skip) {
+      skip = 0;
+    }
+    if (!take) {
+      take = 10;
+    }
     const where = {};
 
     if (username) {
@@ -191,9 +199,13 @@ export class UserService {
         not: null,
       };
     }
-
-    return this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
+      skip: skip,
+      take: take,
       where,
+      orderBy: {
+        username: 'asc',
+      },
       select: {
         id: true,
         username: true,
@@ -206,6 +218,13 @@ export class UserService {
         },
       },
     });
+    const allUsersCount = await this.prisma.user.count({
+      where,
+    });
+    return {
+      users,
+      count: allUsersCount,
+    };
   }
   async starUser(userId: number, starredById: number) {
     try {

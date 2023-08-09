@@ -19,7 +19,7 @@ import {
   getAllLanguages,
 } from "../../logic/selectValues";
 import { useTheme } from "@emotion/react";
-import { formatNumberArrayToQuery } from "../../logic/other";
+import { calculateTotalPages, formatSearchQuery } from "../../logic/other";
 import { searchUsers } from "../../logic/user";
 import SearchResult from "./SearchResult/SearchResult";
 
@@ -43,6 +43,7 @@ function getStyles(name: string, hobbies: string[], theme: any) {
 }
 
 const Search = () => {
+  const perPage = 10;
   const theme = useTheme();
   const [searchResult, setSearchResult] = useState<any[]>([]);
   const [possibleHobbies, setPossibleHobbies] = useState<any[]>([]);
@@ -53,6 +54,9 @@ const Search = () => {
   const [selectedLanguages, setSelectedLanguages] = useState<any[]>([]);
   const [selectedGender, setSelectedGender] = useState<any[]>([]);
   const [onlyWithDescription, setOnlyWithDescription] = useState<boolean>(false);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+
 
   const usernameRef: any = useRef();
 
@@ -106,45 +110,38 @@ const Search = () => {
   };
 
   const handleSearch = async () => {
-    const formattedHobbies = formatNumberArrayToQuery(
+    const query = formatSearchQuery(
       selectedHobbies,
-      "hobbies"
-    );
-    const formattedCountries = formatNumberArrayToQuery(
       selectedCountries,
-      "countries"
-    );
-    const formattedLanguages = formatNumberArrayToQuery(
       selectedLanguages,
-      "languages"
-    );
-    const formattedGender = formatNumberArrayToQuery(
       selectedGender,
-      "gender",
+      usernameRef.current.value,
+      onlyWithDescription,
+      page,
+      perPage,
     );
-
-    const username = usernameRef.current.value;
-    let query = "";
-    if (username) {
-      query += `username=${username}&`;
-    }
-    if (formattedHobbies) {
-      query += formattedHobbies;
-    }
-    if (formattedCountries) {
-      query += formattedCountries;
-    }
-    if (formattedLanguages) {
-      query += formattedLanguages;
-    }
-    if (formattedGender) {
-      query += formattedGender;
-    }
-    query += `description=${onlyWithDescription}`;
     const searchedUsers = await searchUsers(query);
-    setSearchResult(searchedUsers);
+    setPage(1);
+    const total = calculateTotalPages(searchedUsers.count, perPage);
+    setTotalPages(total); 
+    setSearchResult(searchedUsers.users);
   };
-
+  
+  const handlePageChange = async (pageParam: number) => {
+    setPage(pageParam);
+    const query = formatSearchQuery(
+      selectedHobbies,
+      selectedCountries,
+      selectedLanguages,
+      selectedGender,
+      usernameRef.current.value,
+      onlyWithDescription,
+      pageParam,
+      perPage,
+    );
+    const searchedUsers = await searchUsers(query);
+    setSearchResult(searchedUsers.users);
+  };
   return (
     <>
       <Box
@@ -312,7 +309,7 @@ const Search = () => {
           </Button>
         </Box>
         <Box sx={{ flex: 1, ml: 2, overflowY: "auto", height: "100%" }}>
-          <SearchResult users={searchResult} />
+          <SearchResult users={searchResult} totalPages={totalPages} page={page} handlePageChange={handlePageChange} />
         </Box>
       </Box>
     </>
