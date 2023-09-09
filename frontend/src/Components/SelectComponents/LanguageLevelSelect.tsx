@@ -1,6 +1,17 @@
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 
-const LanguageLevelSelect = (props: { selectedLevel: "BASIC" | "INTERMEDIATE" | "FLUENT" | "NATIVE", handleLevelChange: any }) => {
+const LanguageLevelSelect = (props: {
+  selectedLevel: "BASIC" | "INTERMEDIATE" | "FLUENT" | "NATIVE" | undefined;
+  handleLevelChange: (
+    event: SelectChangeEvent<"BASIC" | "INTERMEDIATE" | "FLUENT" | "NATIVE">,
+  ) => void;
+}) => {
   return (
     <FormControl fullWidth>
       <InputLabel id="level-label">Level</InputLabel>
@@ -15,8 +26,7 @@ const LanguageLevelSelect = (props: { selectedLevel: "BASIC" | "INTERMEDIATE" | 
         <MenuItem value="NATIVE">Native</MenuItem>
       </Select>
     </FormControl>
-  )
+  );
 };
 
 export default LanguageLevelSelect;
-

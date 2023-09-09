@@ -17,11 +17,7 @@ import { enqueueSnackbar } from "notistack";
 import { style } from "./modalStyles";
 import { Hobby } from "../../logic/interfaces";
 
-const HobbyModal = (props: {
-  open: boolean;
-  handleClose: any;
-}) => {
-
+const HobbyModal = (props: { open: boolean; handleClose: () => void }) => {
   const [possibleHobbies, setPossibleHobbies] = useState<Hobby[]>([]);
   const [myHobbies, setMyHobbies] = useState<Hobby[]>([]);
   const getMyHobbiesData = async () => {
@@ -44,7 +40,9 @@ const HobbyModal = (props: {
       const status = await addHobby(hobbyId);
       if (status === 200) {
         getMyHobbiesData();
-        enqueueSnackbar("Successfully added this hobby to your profile", { variant: "success" });
+        enqueueSnackbar("Successfully added this hobby to your profile", {
+          variant: "success",
+        });
       } else {
         enqueueSnackbar("Server error", { variant: "error" });
       }
@@ -52,7 +50,9 @@ const HobbyModal = (props: {
       const status = await removeHobby(hobbyId);
       if (status === 200) {
         getMyHobbiesData();
-        enqueueSnackbar("Successfully removed this hobby from your profile", { variant: "success" });
+        enqueueSnackbar("Successfully removed this hobby from your profile", {
+          variant: "success",
+        });
       } else {
         enqueueSnackbar("Server error", { variant: "error" });
       }
@@ -63,7 +63,7 @@ const HobbyModal = (props: {
       <Modal open={props.open} onClose={props.handleClose}>
         <Box sx={style}>
           <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
-            <Table >
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell></TableCell>
@@ -71,13 +71,18 @@ const HobbyModal = (props: {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {possibleHobbies.map((row: any) => (
+                {possibleHobbies.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>
-                      <Checkbox onChange={(event: any) => handleCheckboxChange(row.id, event.target.checked)} checked={myHobbies.some(obj => obj.id === row.id)} />
+                      <Checkbox
+                        onChange={(event) =>
+                          handleCheckboxChange(row.id, event.target.checked)
+                        }
+                        checked={myHobbies.some((obj) => obj.id === row.id)}
+                      />
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {row.name}

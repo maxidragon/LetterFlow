@@ -4,7 +4,7 @@ import PaginationFooter from "../../../Components/PaginationFooter";
 import { User } from "../../../logic/interfaces";
 
 const SearchResult = (props: {
-  users: User[],
+  users: User[];
   page: number;
   totalPages: number;
   handlePageChange: (page: number) => void;
@@ -14,7 +14,16 @@ const SearchResult = (props: {
       <Typography variant="h4" sx={{ textAlign: "center", mt: 2 }}>
         Results
       </Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'row', mt: 3, flexWrap: 'wrap', overflow: 'auto', height: '70vh' }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          mt: 3,
+          flexWrap: "wrap",
+          overflow: "auto",
+          height: "70vh",
+        }}
+      >
         {props.users.map((user: User) => (
           <SearchCard
             key={user.id}
@@ -24,9 +33,15 @@ const SearchResult = (props: {
             gender={user.gender}
           />
         ))}
-      </Box >
+      </Box>
       <Box>
-        {props.users.length > 0 && <PaginationFooter page={props.page} totalPages={props.totalPages} handlePageChange={props.handlePageChange} />}
+        {props.users.length > 0 && (
+          <PaginationFooter
+            page={props.page}
+            totalPages={props.totalPages}
+            handlePageChange={props.handlePageChange}
+          />
+        )}
       </Box>
     </>
   );

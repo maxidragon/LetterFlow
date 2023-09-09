@@ -9,19 +9,19 @@ import CreateIcon from "@mui/icons-material/Create";
 import WriteLetterModal from "./WriteLetterModal";
 import { style } from "./modalStyles";
 import CountryNameWithFlag from "../CountryNameWithFlag";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 import { enqueueSnackbar } from "notistack";
 import { getUserInfo } from "../../logic/auth";
 import { getDeliveryTime } from "../../logic/letters";
 import dayjs from "dayjs";
-import { UserLanguage } from "../../logic/interfaces";
+import { Profile, UserLanguage } from "../../logic/interfaces";
 const ProfileModal = (props: {
   open: boolean;
-  handleClose: any;
+  handleClose: () => void;
   userId: number;
 }) => {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const [deliveryTime, setDeliveryTime] = useState<number>(0);
@@ -31,16 +31,17 @@ const ProfileModal = (props: {
     const getUserProfile = async () => {
       if (props.open) {
         const data = await getProfile(props.userId);
+        console.log(data);
         const deliveryTime = await getDeliveryTime(props.userId);
         setProfile(data);
         setDeliveryTime(deliveryTime.timeInHours);
         setLoading(false);
       }
-
     };
     getUserProfile();
   }, [props.userId, props.open]);
 
+  if (!profile) return null;
   const handleStar = async () => {
     if (profile.starred) {
       const status = await unstarUser(profile.id);
@@ -59,7 +60,7 @@ const ProfileModal = (props: {
     }
     setProfile({
       ...profile,
-      starred: !profile.starred
+      starred: !profile.starred,
     });
   };
   return (
@@ -79,15 +80,17 @@ const ProfileModal = (props: {
                 )}
               </Box>
               <Typography variant="body1">{profile.description}</Typography>
-              {profile.showBirthDate === "AGE" ?
+              {profile.showBirthDate === "AGE" ? (
                 <Typography variant="h6">
-                  Age: {dayjs(profile.birthDate).diff(dayjs(), 'year') * -1}
+                  Age: {dayjs(profile.birthDate).diff(dayjs(), "year") * -1}
                 </Typography>
-                : profile.showBirthDate === "DATE" && (
+              ) : (
+                profile.showBirthDate === "DATE" && (
                   <Typography variant="h6">
-                    Birth date: {dayjs(profile.birthDate).format('DD/MM/YYYY')}
+                    Birth date: {dayjs(profile.birthDate).format("DD/MM/YYYY")}
                   </Typography>
-                )}
+                )
+              )}
               <Typography variant="h6">
                 Country: <CountryNameWithFlag country={profile.country} />
               </Typography>
@@ -95,9 +98,11 @@ const ProfileModal = (props: {
                 Gender:{" "}
                 {profile.gender &&
                   profile.gender.charAt(0).toUpperCase() +
-                  profile.gender.slice(1).toLowerCase()}
+                    profile.gender.slice(1).toLowerCase()}
               </Typography>
-              <Typography variant="h6">Letter delivers in {deliveryTime} hours</Typography>
+              <Typography variant="h6">
+                Letter delivers in {deliveryTime} hours
+              </Typography>
               <Divider />
               <Typography variant="h6">Hobbies:</Typography>
               <Hobbies hobbies={profile.hobbies} />
@@ -106,9 +111,10 @@ const ProfileModal = (props: {
               {profile.languages.map((language: UserLanguage) => (
                 <Typography variant="h6" key={language.id}>
                   {language.name}{" "}
-                  {`(${language.level.charAt(0) +
+                  {`(${
+                    language.level.charAt(0) +
                     language.level.slice(1).toLowerCase()
-                    })`}
+                  })`}
                 </Typography>
               ))}
               <Divider />

@@ -11,12 +11,26 @@ import { useRef } from "react";
 import { enqueueSnackbar } from "notistack";
 import { changePassword } from "../../logic/auth";
 
-const ChangePasswordModal = (props: { open: boolean; handleClose: any }) => {
-  const oldPasswordRef: any = useRef();
-  const newPasswordRef: any = useRef();
-  const newPasswordAgainRef: any = useRef();
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+const ChangePasswordModal = (props: {
+  open: boolean;
+  handleClose: () => void;
+}) => {
+  const oldPasswordRef: React.MutableRefObject<
+    HTMLInputElement | null | undefined
+  > = useRef();
+  const newPasswordRef: React.MutableRefObject<
+    HTMLInputElement | null | undefined
+  > = useRef();
+  const newPasswordAgainRef: React.MutableRefObject<
+    HTMLInputElement | null | undefined
+  > = useRef();
+  const handleSubmit = async () => {
+    if (
+      !oldPasswordRef.current ||
+      !newPasswordRef.current ||
+      !newPasswordAgainRef.current
+    )
+      return;
     const oldPassword = oldPasswordRef.current.value;
     const newPassword = newPasswordRef.current.value;
     const newPasswordAgain = newPasswordAgainRef.current.value;
@@ -29,7 +43,7 @@ const ChangePasswordModal = (props: { open: boolean; handleClose: any }) => {
       enqueueSnackbar("Password has been changed", { variant: "success" });
       props.handleClose();
     } else if (status === 403) {
-        enqueueSnackbar("Wrong password", { variant: "error" });
+      enqueueSnackbar("Wrong password", { variant: "error" });
     } else {
       enqueueSnackbar("Server error", { variant: "error" });
     }

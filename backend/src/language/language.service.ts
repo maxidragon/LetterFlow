@@ -9,7 +9,7 @@ export class LanguageService {
     return await this.prisma.language.findMany();
   }
   async getUserLanguages(userId: number) {
-    const languages =  await this.prisma.userLanguage.findMany({
+    const languages = await this.prisma.userLanguage.findMany({
       where: {
         userId: userId,
       },

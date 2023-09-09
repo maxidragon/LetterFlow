@@ -43,7 +43,7 @@ export const unstarUser = async (userId: number) => {
   const response = await backendRequest(
     `user/unstar/${userId}`,
     "DELETE",
-    true
+    true,
   );
   return response.status;
 };

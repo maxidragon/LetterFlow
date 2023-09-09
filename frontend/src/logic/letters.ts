@@ -12,7 +12,7 @@ export const getLettersFromConversations = async (receiverId: number) => {
   const response = await backendRequest(
     "letter/all/" + receiverId,
     "GET",
-    true
+    true,
   );
   if (response.status === 200) {
     return await response.json();
@@ -40,7 +40,7 @@ export const getDeliveryTime = async (toUser: number) => {
   const response = await backendRequest(
     `letter/deliveryTime/${toUser}`,
     "GET",
-    true
+    true,
   );
   if (response.status === 200) {
     return await response.json();

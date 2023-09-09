@@ -16,14 +16,14 @@ const StarredUsersList = () => {
   }, []);
 
   return (
-        <>
-            <List>
-                {starredUsers.map((user: User) => (
-                    <StarredUser key={user.id} user={user} />
-                ))}
-            </List>
-        </>
-    );
+    <>
+      <List>
+        {starredUsers.map((user: User) => (
+          <StarredUser key={user.id} user={user} />
+        ))}
+      </List>
+    </>
+  );
 };
 
 export default StarredUsersList;

@@ -6,7 +6,7 @@ import CountryNameWithFlag from "../CountryNameWithFlag";
 const SearchCard = (props: {
   id: number;
   username: string;
-  country: {name: string, code: string};
+  country: { name: string; code: string };
   gender: string;
 }) => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -20,7 +20,9 @@ const SearchCard = (props: {
           <Typography variant="h6" sx={{ textAlign: "center" }}>
             {props.username}
           </Typography>
-          <Typography variant="body2"><CountryNameWithFlag country={props.country}/></Typography>
+          <Typography variant="body2">
+            <CountryNameWithFlag country={props.country} />
+          </Typography>
           <Typography sx={{ mt: 2 }} color="text.secondary">
             {props.gender &&
               props.gender.charAt(0).toUpperCase() +

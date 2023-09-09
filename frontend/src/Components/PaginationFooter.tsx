@@ -1,40 +1,54 @@
 import { Typography, IconButton, Box } from "@mui/material";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useEffect, useState } from "react";
 
-
 const PaginationFooter = (props: {
-    page: number;
-    totalPages: number;
-    handlePageChange: (page: number) => void;
+  page: number;
+  totalPages: number;
+  handlePageChange: (page: number) => void;
 }) => {
-    const [isPreviousPageDisabled, setIsPreviousPageDisabled] = useState<boolean>(false);
-    const [isNextPageDisabled, setIsNextPageDisabled] = useState<boolean>(false);
+  const [isPreviousPageDisabled, setIsPreviousPageDisabled] =
+    useState<boolean>(false);
+  const [isNextPageDisabled, setIsNextPageDisabled] = useState<boolean>(false);
 
-    useEffect(() => {
-        setIsPreviousPageDisabled(props.page === 1);
-        setIsNextPageDisabled(props.page === props.totalPages);
-    }, [props.page, props.totalPages]);
+  useEffect(() => {
+    setIsPreviousPageDisabled(props.page === 1);
+    setIsNextPageDisabled(props.page === props.totalPages);
+  }, [props.page, props.totalPages]);
 
-    const nextPage = () => {
-        if (props.page < props.totalPages) {
-            props.handlePageChange(props.page + 1);
-        }
-    };
-    const previousPage = () => {
-        if (props.page > 1) {
-            props.handlePageChange(props.page - 1);
-        }
-    };
+  const nextPage = () => {
+    if (props.page < props.totalPages) {
+      props.handlePageChange(props.page + 1);
+    }
+  };
+  const previousPage = () => {
+    if (props.page > 1) {
+      props.handlePageChange(props.page - 1);
+    }
+  };
 
-    return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', borderBottom: 'none' }}>
-            <IconButton onClick={previousPage} disabled={isPreviousPageDisabled}><NavigateBeforeIcon /></IconButton>
-            <Typography>Page {props.page} of {props.totalPages}</Typography>
-            <IconButton onClick={nextPage} disabled={isNextPageDisabled}><NavigateNextIcon /></IconButton>
-        </Box>
-    )
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        width: "100%",
+        borderBottom: "none",
+      }}
+    >
+      <IconButton onClick={previousPage} disabled={isPreviousPageDisabled}>
+        <NavigateBeforeIcon />
+      </IconButton>
+      <Typography>
+        Page {props.page} of {props.totalPages}
+      </Typography>
+      <IconButton onClick={nextPage} disabled={isNextPageDisabled}>
+        <NavigateNextIcon />
+      </IconButton>
+    </Box>
+  );
 };
 
 export default PaginationFooter;

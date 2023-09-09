@@ -1,4 +1,12 @@
-import { Box, Button, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import {
   getAllCountries,
@@ -9,10 +17,10 @@ import { calculateTotalPages, formatSearchQuery } from "../../logic/other";
 import { searchUsers } from "../../logic/user";
 import SearchResult from "./SearchResult/SearchResult";
 import { Country, Hobby, Language, User } from "../../logic/interfaces";
-import GenderSelect from "../../Components/Search/GenderSelect";
-import LanguageSelect from "../../Components/Search/LanguageSelect";
-import CountrySelect from "../../Components/Search/CountrySelect";
-import HobbySelect from "../../Components/Search/HobbySelect";
+import GenderSelect from "../../Components/SelectComponents/GenderSelect";
+import LanguageSelect from "../../Components/SelectComponents/LanguageSelect";
+import CountrySelect from "../../Components/SelectComponents/CountrySelect";
+import HobbySelect from "../../Components/SelectComponents/HobbySelect";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -35,11 +43,14 @@ const Search = () => {
   const [possibleLanguages, setPossibleLanguages] = useState<Language[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<number[]>([]);
   const [selectedGender, setSelectedGender] = useState<string[]>([]);
-  const [onlyWithDescription, setOnlyWithDescription] = useState<boolean>(false);
+  const [onlyWithDescription, setOnlyWithDescription] =
+    useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
 
-  const usernameRef: any = useRef();
+  const usernameRef: React.MutableRefObject<
+    HTMLInputElement | null | undefined
+  > = useRef();
 
   useEffect(() => {
     const getPossibleHobbies = async () => {
@@ -59,38 +70,55 @@ const Search = () => {
     getPossibleLanguages();
   }, []);
 
-  const handleHobbySelectChange = (event: any) => {
+  const handleHobbySelectChange = (event: SelectChangeEvent<number[]>) => {
     const {
       target: { value },
     } = event;
-    const newValue = typeof value === "string" ? value.split(",") : value;
+
+    const newValue =
+      typeof value === "string" ? value.split(",").map(Number) : value;
+
     setSelectedHobbies(newValue);
   };
 
-  const handleCountrySelectChange = (event: any) => {
+  const handleCountrySelectChange = (event: SelectChangeEvent<number[]>) => {
     const {
       target: { value },
     } = event;
-    const newValue = typeof value === "string" ? value.split(",") : value;
+    const newValue =
+      typeof value === "string" ? value.split(",").map(Number) : value;
     setSelectedCountries(newValue);
   };
-  const handleLanguageSelectChange = (event: any) => {
+
+  const handleLanguageSelectChange = (event: SelectChangeEvent<number[]>) => {
     const {
       target: { value },
     } = event;
-    const newValue = typeof value === "string" ? value.split(",") : value;
+    const newValue =
+      typeof value === "string" ? value.split(",").map(Number) : value;
     setSelectedLanguages(newValue);
   };
 
-  const handleGenderChange = (event: any) => {
+  const handleGenderChange = (event: SelectChangeEvent<string[]>) => {
     const newValues = event.target.value as string[];
     setSelectedGender(newValues);
   };
-  const handleOnlyWithDescriptionChange = (event: any) => {
+  const handleOnlyWithDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setOnlyWithDescription(event.target.checked);
   };
 
   const handleSearch = async () => {
+    if (
+      usernameRef === null ||
+      usernameRef.current === null ||
+      usernameRef.current?.value === null ||
+      usernameRef.current?.value === undefined ||
+      usernameRef.current === undefined
+    ) {
+      return;
+    }
     const query = formatSearchQuery(
       selectedHobbies,
       selectedCountries,
@@ -106,11 +134,18 @@ const Search = () => {
     const total = calculateTotalPages(searchedUsers.count, perPage);
     setTotalPages(total);
     setSearchResult(searchedUsers.users);
-
-
   };
 
   const handlePageChange = async (pageParam: number) => {
+    if (
+      usernameRef === null ||
+      usernameRef.current === null ||
+      usernameRef.current?.value === null ||
+      usernameRef.current?.value === undefined ||
+      usernameRef.current === undefined
+    ) {
+      return;
+    }
     setPage(pageParam);
     const query = formatSearchQuery(
       selectedHobbies,
@@ -142,11 +177,38 @@ const Search = () => {
             variant="outlined"
             inputRef={usernameRef}
           />
-          <HobbySelect selectedHobbies={selectedHobbies} handleHobbySelectChange={handleHobbySelectChange} menu={MenuProps} possibleHobbies={possibleHobbies} />
-          <CountrySelect selectedCountries={selectedCountries} handleCountrySelectChange={handleCountrySelectChange} menu={MenuProps} possibleCountries={possibleCountries} />
-          <LanguageSelect selectedLanguages={selectedLanguages} handleLanguageSelectChange={handleLanguageSelectChange} menu={MenuProps} possibleLanguages={possibleLanguages} />
-          <GenderSelect selectedGender={selectedGender} handleGenderChange={handleGenderChange} menu={MenuProps} />
-          <FormControlLabel control={<Checkbox onChange={handleOnlyWithDescriptionChange} checked={onlyWithDescription} />} label="Only with description" />
+          <HobbySelect
+            selectedHobbies={selectedHobbies}
+            handleHobbySelectChange={handleHobbySelectChange}
+            menu={MenuProps}
+            possibleHobbies={possibleHobbies}
+          />
+          <CountrySelect
+            selectedCountries={selectedCountries}
+            handleCountrySelectChange={handleCountrySelectChange}
+            menu={MenuProps}
+            possibleCountries={possibleCountries}
+          />
+          <LanguageSelect
+            selectedLanguages={selectedLanguages}
+            handleLanguageSelectChange={handleLanguageSelectChange}
+            menu={MenuProps}
+            possibleLanguages={possibleLanguages}
+          />
+          <GenderSelect
+            selectedGender={selectedGender}
+            handleGenderChange={handleGenderChange}
+            menu={MenuProps}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={handleOnlyWithDescriptionChange}
+                checked={onlyWithDescription}
+              />
+            }
+            label="Only with description"
+          />
           <Button
             variant="contained"
             sx={{ mt: 2, width: "100%" }}
@@ -156,7 +218,12 @@ const Search = () => {
           </Button>
         </Box>
         <Box sx={{ flex: 1, ml: 2, overflowY: "auto", height: "100%" }}>
-          <SearchResult users={searchResult} totalPages={totalPages} page={page} handlePageChange={handlePageChange} />
+          <SearchResult
+            users={searchResult}
+            totalPages={totalPages}
+            page={page}
+            handlePageChange={handlePageChange}
+          />
         </Box>
       </Box>
     </>

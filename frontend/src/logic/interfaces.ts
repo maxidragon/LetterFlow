@@ -50,7 +50,7 @@ export interface Settings {
   description: string;
   appearInSearch: boolean;
   birthDate: Date;
-  showBirthDate: "AGE" | "FULL" | "NONE";
+  showBirthDate: "AGE" | "DATE" | "NONE";
   country: Country;
 }
 
@@ -59,10 +59,10 @@ export interface Profile {
   username: string;
   description: string;
   birthDate: Date;
-  showBirthDate: "AGE" | "FULL" | "NONE";
+  showBirthDate: "AGE" | "DATE" | "NONE";
   country: Country;
   gender: "FEMALE" | "MALE" | "OTHER";
-  replyTime?: number;
+  replyTime?: string;
   timezone: string;
   starred: boolean;
   sendLetters: number;

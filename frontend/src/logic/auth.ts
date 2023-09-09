@@ -14,7 +14,7 @@ export const registerUser = async (
   email: FormDataEntryValue | null,
   username: FormDataEntryValue | null,
   password: FormDataEntryValue | null,
-  gender: FormDataEntryValue | null
+  gender: FormDataEntryValue | null,
 ) => {
   try {
     const userIp = await getUserIP();
@@ -38,7 +38,7 @@ export const registerUser = async (
 };
 export const login = async (
   email: FormDataEntryValue | null,
-  password: FormDataEntryValue | null
+  password: FormDataEntryValue | null,
 ) => {
   try {
     const response = await backendRequest("auth/login", "POST", false, {
@@ -77,7 +77,7 @@ export const resetPassword = async (resetId: string, newPassword: string) => {
 
 export const changePassword = async (
   oldPassword: string,
-  newPassword: string
+  newPassword: string,
 ) => {
   const response = await backendRequest("auth/password/change", "PUT", true, {
     oldPassword: oldPassword,
@@ -91,7 +91,7 @@ export const getUserProfile = async (userId: number) => {
     const response = await backendRequest(
       "user/profile/" + userId,
       "GET",
-      true
+      true,
     );
     return await response.json();
   } catch (error) {
@@ -109,7 +109,7 @@ export const verifyCountry = async () => {
   const response = await backendRequest(
     `auth/country/verify?ip=${userIp}`,
     "GET",
-    true
+    true,
   );
   const data = await response.json();
   return data;

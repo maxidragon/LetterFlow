@@ -1,8 +1,10 @@
+const BACKEND_ORIGIN = import.meta.env.PROD ? "/api" : "http://localhost:5000";
+
 export const backendRequest = (
   path: string,
   method: string,
   useAuth: boolean,
-  body?: any
+  body?: unknown,
 ) => {
   const token = localStorage.getItem("token");
   const headers = new Headers();
@@ -10,7 +12,7 @@ export const backendRequest = (
   if (token && useAuth) {
     headers.append("Authorization", `Bearer ${token}`);
   }
-  return fetch(`http://localhost:5000/${path}`, {
+  return fetch(`${BACKEND_ORIGIN}/${path}`, {
     method: method,
     headers: headers,
     redirect: "follow",

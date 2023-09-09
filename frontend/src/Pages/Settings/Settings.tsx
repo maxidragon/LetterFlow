@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import dayjs from 'dayjs';
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import { getSettings, updateSettings } from "../../logic/user";
 import {
   Box,
@@ -25,10 +25,12 @@ import ProfileModal from "../../Components/ModalComponents/ProfileModal";
 import { DatePicker } from "@mui/x-date-pickers";
 
 const Settings = () => {
-  const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
-  const [openChangePasswordModal, setOpenChangePasswordModal] = useState<boolean>(false);
-  const [openLanguageModal, setOpenLanguageModal] = useState<boolean>(false);
+  //eslint-disable-next-line
   const [settings, setSettings] = useState<any>(null);
+  const [openHobbyModal, setOpenHobbyModal] = useState<boolean>(false);
+  const [openChangePasswordModal, setOpenChangePasswordModal] =
+    useState<boolean>(false);
+  const [openLanguageModal, setOpenLanguageModal] = useState<boolean>(false);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -39,27 +41,29 @@ const Settings = () => {
 
     fetchData();
   }, []);
-  const handleEmailChange = (event: any) => {
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSettings({
       ...settings,
       email: event.target.value,
     });
   };
-  const handleUsernameChange = (event: any) => {
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSettings({
       ...settings,
       username: event.target.value,
     });
   };
 
-  const handleAppearInSearchChange = (event: any) => {
+  const handleAppearInSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSettings({
       ...settings,
       appearInSearch: event.target.checked,
     });
   };
 
-  const handleBirthDateChange = (newValue: any) => {
+  const handleBirthDateChange = (newValue: Date | null) => {
     if (newValue instanceof Date) {
       setSettings({
         ...settings,
@@ -78,35 +82,37 @@ const Settings = () => {
       });
     }
   };
-
+  //eslint-disable-next-line
   const handleShowBirthDateChange = (event: any) => {
     setSettings({
       ...settings,
       showBirthDate: event.target.value,
     });
   };
-  const handleDescriptionChange = (event: any) => {
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSettings({
       ...settings,
       description: event.target.value,
     });
   };
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     const response = await updateSettings(settings);
     if (response.status === 200) {
       enqueueSnackbar("Settings has been updated", { variant: "success" });
     } else if (response.status === 400) {
       response.data.message.forEach((msg: string) => {
-        enqueueSnackbar((msg.charAt(0).toUpperCase() + msg.slice(1)), { variant: "error" });
+        enqueueSnackbar(msg.charAt(0).toUpperCase() + msg.slice(1), {
+          variant: "error",
+        });
       });
     } else {
       enqueueSnackbar("Server error", { variant: "error" });
     }
   };
-  const handleCountryVerify = async (event: any) => {
-    event.preventDefault();
+  const handleCountryVerify = async () => {
     const data = await verifyCountry();
     if (data) {
       enqueueSnackbar(data.msg, { variant: "success" });
@@ -133,7 +139,11 @@ const Settings = () => {
               <Typography variant="h5">Settings</Typography>
             </Grid>
             <Grid item>
-              <Button variant="contained" endIcon={<PersonIcon />} onClick={() => setShowProfileModal(true)}>
+              <Button
+                variant="contained"
+                endIcon={<PersonIcon />}
+                onClick={() => setShowProfileModal(true)}
+              >
                 Preview profile
               </Button>
             </Grid>
@@ -172,13 +182,17 @@ const Settings = () => {
                 <Grid item>
                   <DatePicker
                     label="Birth date"
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     value={dayjs(settings.birthDate)}
                     onChange={handleBirthDateChange}
                   />
                 </Grid>
                 <Grid item>
-                  <FormControl fullWidth sx={{ textAlign: 'left' }}>
-                    <InputLabel id="show-birth-date-label">Show birth date on profile</InputLabel>
+                  <FormControl fullWidth sx={{ textAlign: "left" }}>
+                    <InputLabel id="show-birth-date-label">
+                      Show birth date on profile
+                    </InputLabel>
                     <Select
                       labelId="show-birth-date-label"
                       value={settings.showBirthDate}
@@ -191,7 +205,15 @@ const Settings = () => {
                   </FormControl>
                 </Grid>
                 <Grid item>
-                  <FormControlLabel control={<Checkbox onChange={handleAppearInSearchChange} checked={settings.appearInSearch} />} label="Appear in search" />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={handleAppearInSearchChange}
+                        checked={settings.appearInSearch}
+                      />
+                    }
+                    label="Appear in search"
+                  />
                 </Grid>
                 <Grid item>
                   <TextField

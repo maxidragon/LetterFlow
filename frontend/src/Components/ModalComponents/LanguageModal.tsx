@@ -19,22 +19,29 @@ import { useEffect, useState } from "react";
 import { getAllLanguages } from "../../logic/selectValues";
 import { enqueueSnackbar } from "notistack";
 import { style } from "./modalStyles";
-import { addLanguage, getMyLanguages, removeLanguage } from "../../logic/language";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  addLanguage,
+  getMyLanguages,
+  removeLanguage,
+} from "../../logic/language";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import LanguageLevelSelect from "../SelectComponents/LanguageLevelSelect";
 import EditLanguageModal from "./EditLanguageModal";
 import { Language, UserLanguage } from "../../logic/interfaces";
 
-const LanguageModal = (props: { open: boolean; handleClose: any }) => {
+const LanguageModal = (props: { open: boolean; handleClose: () => void }) => {
   const confirm = useConfirm();
   const [possibleLanguages, setPossibleLanguages] = useState<Language[]>([]);
   const [myLanguages, setMyLanguages] = useState<UserLanguage[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<any>(undefined);
-  const [selectedLevel, setSelectedLevel] = useState<any>(undefined);
-  const [editedLanguage, setEditedLanguage] = useState<any>(null);
-  const [openEditLanguageModal, setOpenEditLanguageModal] = useState<boolean>(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<number>(0);
+  const [selectedLevel, setSelectedLevel] = useState<
+    "BASIC" | "INTERMEDIATE" | "FLUENT" | "NATIVE" | undefined
+  >(undefined);
+  const [editedLanguage, setEditedLanguage] = useState<UserLanguage>();
+  const [openEditLanguageModal, setOpenEditLanguageModal] =
+    useState<boolean>(false);
   const getMyLanguagesData = async () => {
     const data = await getMyLanguages();
     setMyLanguages(data);
@@ -48,13 +55,15 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
     getMyLanguagesData();
   }, []);
   const handleLanguageChange = (event: SelectChangeEvent) => {
-    setSelectedLanguage(+event.target.value);
+    setSelectedLanguage(event.target.value as unknown as number);
   };
   const handleLevelChange = (event: SelectChangeEvent) => {
-    setSelectedLevel(event.target.value);
+    setSelectedLevel(
+      event.target.value as "BASIC" | "INTERMEDIATE" | "FLUENT" | "NATIVE",
+    );
   };
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    if (!selectedLevel || !selectedLanguage) return;
     const status = await addLanguage(selectedLanguage, selectedLevel);
     if (status === 201) {
       enqueueSnackbar("Language has been added", { variant: "success" });
@@ -64,17 +73,22 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
     }
   };
   const handleDeleteLanguage = async (id: number) => {
-    confirm({ "description": "Are you sure you want to remove this language from your profile?" }).then(async () => {
-      const status = await removeLanguage(id);
-      if (status === 204) {
-        enqueueSnackbar("Language has been removed", { variant: "success" });
-        await getMyLanguagesData();
-      } else {
-        enqueueSnackbar("Server error", { variant: "error" });
-      }
-    }).catch(() => {
-      enqueueSnackbar("Language has not been removed", { variant: "info" });
-    });
+    confirm({
+      description:
+        "Are you sure you want to remove this language from your profile?",
+    })
+      .then(async () => {
+        const status = await removeLanguage(id);
+        if (status === 204) {
+          enqueueSnackbar("Language has been removed", { variant: "success" });
+          await getMyLanguagesData();
+        } else {
+          enqueueSnackbar("Server error", { variant: "error" });
+        }
+      })
+      .catch(() => {
+        enqueueSnackbar("Language has not been removed", { variant: "info" });
+      });
   };
   return (
     <>
@@ -83,34 +97,39 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
           <Typography variant="h6">My languages</Typography>
           <List>
             {myLanguages.map((row: UserLanguage) => (
-                <ListItem
-                  secondaryAction={
-                    <>
-                      <IconButton edge="end" aria-label="edit" onClick={() => {
+              <ListItem
+                secondaryAction={
+                  <>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => {
                         setEditedLanguage(row);
                         setOpenEditLanguageModal(true);
-                      }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="delete" onClick={() => {
-                        handleDeleteLanguage(row.id);
-                      }}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </>
-                  }
-                  key={row.id}
-                >
-                  <ListItemAvatar>
-                    <Avatar>
+                      }}
+                    >
                       <EditIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={row.name}
-                    secondary={row.level}
-                  />
-                </ListItem>
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => {
+                        handleDeleteLanguage(row.id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                }
+                key={row.id}
+              >
+                <ListItemAvatar>
+                  <Avatar>
+                    <EditIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={row.name} secondary={row.level} />
+              </ListItem>
             ))}
           </List>
           <Box
@@ -124,24 +143,37 @@ const LanguageModal = (props: { open: boolean; handleClose: any }) => {
               <InputLabel id="language-label">Language</InputLabel>
               <Select
                 labelId="language-label"
-                value={selectedLanguage}
+                value={selectedLanguage.toString()}
                 onChange={handleLanguageChange}
               >
-                {possibleLanguages.map((row: Language) => (
-                  !myLanguages.some((language) => language.id === row.id) && (
-                    <MenuItem value={row.id} key={row.id}>{row.name}</MenuItem>
-                  )
-                ))}
+                {possibleLanguages.map(
+                  (row: Language) =>
+                    !myLanguages.some((language) => language.id === row.id) && (
+                      <MenuItem value={row.id} key={row.id}>
+                        {row.name}
+                      </MenuItem>
+                    ),
+                )}
               </Select>
             </FormControl>
-            <LanguageLevelSelect selectedLevel={selectedLevel} handleLevelChange={handleLevelChange} />
+            <LanguageLevelSelect
+              selectedLevel={selectedLevel || "BASIC"}
+              handleLevelChange={handleLevelChange}
+            />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               Add
             </Button>
           </Box>
-          {editedLanguage && <EditLanguageModal open={openEditLanguageModal} handleClose={() => setOpenEditLanguageModal(false)} editedLanguage={editedLanguage} getMyLanguages={getMyLanguagesData} />}
+          {editedLanguage && (
+            <EditLanguageModal
+              open={openEditLanguageModal}
+              handleClose={() => setOpenEditLanguageModal(false)}
+              editedLanguage={editedLanguage}
+              getMyLanguages={getMyLanguagesData}
+            />
+          )}
         </Box>
       </Modal>
     </>
