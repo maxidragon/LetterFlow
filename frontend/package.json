@@ -23,7 +23,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "react-world-flags": "^1.5.1",
+    "react-world-flags": "^1.6.0",
     "styled-components": "^5.3.11",
     "typescript": "^5.2.2",
     "web-vitals": "^3.4.0"
@@ -56,7 +56,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-world-flags": "^1.4.2",
+    "@types/react-world-flags": "^1.4.3",
     "@vitejs/plugin-react": "^4.1.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
