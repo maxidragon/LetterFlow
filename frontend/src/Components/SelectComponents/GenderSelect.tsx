@@ -40,8 +40,8 @@ const GenderSelect = (props: {
                     value === "MALE"
                       ? "Male"
                       : value === "FEMALE"
-                      ? "Female"
-                      : "Other"
+                        ? "Female"
+                        : "Other"
                   }
                 />
               );
